@@ -1123,17 +1123,22 @@ End Function
 'numOfFrcDigits:
 '    求める小数点以下の桁数
 '    指定桁数で除算を打ち切る
-'    (-)値を設定した場合は、小数点以下は求めない
+'    0を設定した場合は、小数点以下は求めない
+'    (-)値を設定した場合は、その値を(-1)倍した桁を残した状態で、除算を打ち切る
+'    ex:)
+'    【前提】512 / 3 = 100 余り 212
+'    【実行方法】x = divide("500", "3", 10, -2, rm, code)
+'    【結果】 x:100
+'            rm:212
 '
 'remainder
 '    剰余
-'    (numOfFrcDigits > 0)の場合は、
-'    numOfFrcDigitsでの剰余を格納する
+'    numOfFrcDigitsで指定した桁まで除算した時の剰余を格納する
 '    ex:)
 '    【前提】10 / 8 = 1.2 余り 0.4
 '    【実行方法】x = divide("10", "8", 10, 1, rm, code)
 '    【結果】 x:012
-'            rm:4
+'            rm:004
 '
 '!CAUTION!
 '    dividend, divisor が有効なn進値であるかはチェックしない
@@ -1148,19 +1153,17 @@ Private Function divide(ByVal dividend As String, ByVal divisor As String, ByVal
     Dim digitOfDividend As Long '一時被除数
     Dim stringBuilder() As String '商格納用
     Dim digitIdxOfDividend As Long 'Division結果文字列長
+    Dim orgLenOfDividend As Long
     Dim divisorDec As Long
+    Dim digitsOf0 As Long
     Dim stsOfSub As Variant
     
-    'todo
-    'numOfFrcDigitsが(-)値で、dividendの桁数より大きい場合のハンドリング
-    '→空文字を返却して、余りにdiviendを格納するのがよい？
-    '→空文字を返すことによる影響は？
-    
     'numOfFrcDigitsが(-)値で、dividendの桁数より大きい場合
+    orgLenOfDividend = Len(dividend)
     If (numOfFrcDigits < 0) Then
-        If (Len(dividend) <= ((-1) * numOfFrcDigits)) Then
+        If (orgLenOfDividend <= ((-1) * numOfFrcDigits)) Then
             remainder = dividend
-            divide = ""
+            divide = String(orgLenOfDividend, "0")
             Exit Function
         End If
         
@@ -1197,12 +1200,10 @@ Private Function divide(ByVal dividend As String, ByVal divisor As String, ByVal
     
     '実行ループ
     Do
+        '小数桁数指定が(-)値の場合は、当該桁で打ち切る
         If (numOfFrcDigits < 0) Then
-            If (Len(dividend) - digitIdxOfDividend) < (numOfFrcDigits * (-1)) Then
-                'todo '残りの文字をremiderに積み上げる
-                
+            If (orgLenOfDividend - digitIdxOfDividend) < (numOfFrcDigits * (-1)) Then
                 Exit Do
-                
             End If
             
         End If
@@ -1234,16 +1235,19 @@ Private Function divide(ByVal dividend As String, ByVal divisor As String, ByVal
     Loop While digitIdxOfDividend <= Len(dividend) '最終文字に到達しない間
     
     '余り算出
-    tmp = convRadixOfInt(rmnd, 10, radix)
-    tmp = String(digitIdxOfDividend - 1 - Len(tmp), "0") & tmp
+    tmpRM = convRadixOfInt(rmnd, 10, radix)
+    tmpRM = String(digitIdxOfDividend - 1 - Len(tmpRM), "0") & tmpRM
+    tmpAns = Join(stringBuilder, vbNullString) '文字列連結
     
     If (numOfFrcDigits < 0) Then '2桁目以上の桁で、除算を中断していた場合
-        tmp = tmp & Right(dividend, Len(dividend) - digitIdxOfDividend + 1)
+        digitsOf0 = orgLenOfDividend - digitIdxOfDividend + 1
+        tmpRM = tmpRM & Right(dividend, digitsOf0)
+        tmpAns = tmpAns & String(digitsOf0, "0")
         
     End If
     
-    remainder = tmp
-    divide = Join(stringBuilder, vbNullString) '文字列連結
+    remainder = tmpRM
+    divide = tmpAns
     
     Exit Function
     
@@ -1645,5 +1649,7 @@ Private Function invertStringArray(ByRef srcArr() As String) As String()
     invertStringArray = retArr
     
 End Function
+
+
 
 
