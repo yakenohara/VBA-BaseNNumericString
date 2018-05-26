@@ -422,37 +422,41 @@ Private Function comDivideBaseNNumber(ByVal dividend As String, ByVal divisor As
     toCutLenOfIntPrtOfTmpAns = Len(intPrtOfVal1) + Len(frcPrtOfVal2)
     lenOfTmpAns = Len(tmpAns)
     
-    '整数&小数部の切り出し
+    'tmpAnsに対する整数&小数部の切り出し
     If (toCutLenOfIntPrtOfTmpAns <= lenOfTmpAns) Then '整数部分の桁数はtmpAns内
         intPrtOfAns = Left(tmpAns, toCutLenOfIntPrtOfTmpAns)
-        frcPrtOfAns = Right(tmpAns, Len(tmpAns) - toCutLenOfIntPrtOfTmpAns)
-        
-        intPrtOfRem = Left(rm, toCutLenOfIntPrtOfTmpAns)
-        frcPrtOfRem = Right(rm, Len(rm) - toCutLenOfIntPrtOfTmpAns)
+        frcPrtOfAns = Right(tmpAns, lenOfTmpAns - toCutLenOfIntPrtOfTmpAns)
         
     Else '整数部分の桁数はtmpAns内に収まらない
         intPrtOfAns = tmpAns & String(toCutLenOfIntPrtOfTmpAns - lenOfTmpAns, "0")
         frcPrtOfAns = ""
         
-        intPrtOfRem = rm & String(toCutLenOfIntPrtOfTmpAns - lenOfTmpAns, "0")
-        frcPrtOfRem = ""
-        
     End If
     
     '不要な"0"を削除
     intPrtOfAns = removeLeft0(intPrtOfAns)
-    intPrtOfRem = removeLeft0(intPrtOfRem)
     If (frcPrtOfAns <> "") And (Len(frcPrtOfAns) <> limitOfFrcDigits) Then '小数点以下桁数は指定桁数での算出終了ではない
-        frcPrtOfAns = removeRight0(frcPrtOfAns)
-        frcPrtOfRem = removeRight0(frcPrtOfRem)
         
+        frcPrtOfAns = removeRight0(frcPrtOfAns)
         If (frcPrtOfAns = "0") Then
             frcPrtOfAns = ""
         End If
         
+    End If
+    
+    'rmに対する整数&小数部の切り出し
+    intPrtOfRem = Left(rm, Len(intPrtOfVal1))
+    frcPrtOfRem = Right(rm, Len(rm) - Len(intPrtOfRem))
+    
+    '不要な"0"を削除
+    intPrtOfRem = removeLeft0(intPrtOfRem)
+    If (frcPrtOfRem <> "") And (Len(frcPrtOfRem) <> limitOfFrcDigits) Then '小数点以下桁数は指定桁数での算出終了ではない
+        
+        frcPrtOfRem = removeRight0(frcPrtOfRem)
         If (frcPrtOfRem = "0") Then
             frcPrtOfRem = ""
         End If
+
     End If
     
     '符号判定
