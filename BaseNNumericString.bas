@@ -356,6 +356,21 @@ End Function
 '    【結果】 x:100
 '
 Public Function divideBaseNNumber(ByVal dividend As String, ByVal divisor As String, Optional ByVal radix As Byte = 10, Optional ByVal limitOfFrcDigits As Long = DEFAULT_LIMIT_OF_FRC_DIGITS) As Variant
+    
+    divideBaseNNumber = comDivideBaseNNumber(dividend, divisor, radix, False, limitOfFrcDigits)
+    
+End Function
+
+Public Function divideBaseNNumberRem(ByVal dividend As String, ByVal divisor As String, Optional ByVal radix As Byte = 10, Optional ByVal limitOfFrcDigits As Long = DEFAULT_LIMIT_OF_FRC_DIGITS) As Variant
+    
+    divideBaseNNumberRem = comDivideBaseNNumber(dividend, divisor, radix, True, limitOfFrcDigits)
+    
+End Function
+
+'
+'public divide 用共通関数
+'
+Private Function comDivideBaseNNumber(ByVal dividend As String, ByVal divisor As String, ByVal radix As Byte, ByVal returnRemainder As Boolean, ByVal limitOfFrcDigits As Long) As Variant
 
     Dim intPrtOfVal1 As String
     Dim frcPrtOfVal1 As String
@@ -375,11 +390,14 @@ Public Function divideBaseNNumber(ByVal dividend As String, ByVal divisor As Str
     Dim signOfAns As String
     Dim intPrtOfAns As String
     Dim frcPrtOfAns As String
+    Dim signOfRem As String
+    Dim intPrtOfRem As String
+    Dim frcPrtOfRem As String
     
     'val1の文字列チェック&小数、整数分解
     stsOfSub = separateToIntAndFrc(dividend, radix, True, intPrtOfVal1, frcPrtOfVal1, isMinusOfVal1)
     If IsError(stsOfSub) Then 'val1はn進値として不正
-        divideBaseNNumber = stsOfSub 'checkBaseNNumberのエラーコードを返す
+        comDivideBaseNNumber = stsOfSub 'checkBaseNNumberのエラーコードを返す
         Exit Function
         
     End If
@@ -387,7 +405,7 @@ Public Function divideBaseNNumber(ByVal dividend As String, ByVal divisor As Str
     'val2の文字列チェック&小数、整数分解
     stsOfSub = separateToIntAndFrc(divisor, radix, True, intPrtOfVal2, frcPrtOfVal2, isMinusOfVal2)
     If IsError(stsOfSub) Then 'val2はn進値として不正
-        divideBaseNNumber = stsOfSub 'checkBaseNNumberのエラーコードを返す
+        comDivideBaseNNumber = stsOfSub 'checkBaseNNumberのエラーコードを返す
         Exit Function
         
     End If
@@ -396,7 +414,7 @@ Public Function divideBaseNNumber(ByVal dividend As String, ByVal divisor As Str
     tmpAns = divide(intPrtOfVal1 & frcPrtOfVal1, intPrtOfVal2 & frcPrtOfVal2, radix, limitOfFrcDigits + Len(frcPrtOfVal2) - Len(frcPrtOfVal1), rm, stsOfSub)
     
     If IsError(stsOfSub) Then '除算処理でエラー
-        divideBaseNNumber = stsOfSub 'divideのエラーコードを返す
+        comDivideBaseNNumber = stsOfSub 'divideのエラーコードを返す
         Exit Function
         
     End If
@@ -409,18 +427,31 @@ Public Function divideBaseNNumber(ByVal dividend As String, ByVal divisor As Str
         intPrtOfAns = Left(tmpAns, toCutLenOfIntPrtOfTmpAns)
         frcPrtOfAns = Right(tmpAns, Len(tmpAns) - toCutLenOfIntPrtOfTmpAns)
         
+        intPrtOfRem = Left(rm, toCutLenOfIntPrtOfTmpAns)
+        frcPrtOfRem = Right(rm, Len(rm) - toCutLenOfIntPrtOfTmpAns)
+        
     Else '整数部分の桁数はtmpAns内に収まらない
         intPrtOfAns = tmpAns & String(toCutLenOfIntPrtOfTmpAns - lenOfTmpAns, "0")
         frcPrtOfAns = ""
+        
+        intPrtOfRem = rm & String(toCutLenOfIntPrtOfTmpAns - lenOfTmpAns, "0")
+        frcPrtOfRem = ""
         
     End If
     
     '不要な"0"を削除
     intPrtOfAns = removeLeft0(intPrtOfAns)
+    intPrtOfRem = removeLeft0(intPrtOfRem)
     If (frcPrtOfAns <> "") And (Len(frcPrtOfAns) <> limitOfFrcDigits) Then '小数点以下桁数は指定桁数での算出終了ではない
         frcPrtOfAns = removeRight0(frcPrtOfAns)
+        frcPrtOfRem = removeRight0(frcPrtOfRem)
+        
         If (frcPrtOfAns = "0") Then
             frcPrtOfAns = ""
+        End If
+        
+        If (frcPrtOfRem = "0") Then
+            frcPrtOfRem = ""
         End If
     End If
     
@@ -444,7 +475,17 @@ Public Function divideBaseNNumber(ByVal dividend As String, ByVal divisor As Str
         signOfAns = ""
     End If
     
-    divideBaseNNumber = signOfAns & intPrtOfAns & IIf(frcPrtOfAns = "", "", DOT & frcPrtOfAns)
+    If ((intPrtOfRem & frcPrtOfRem) = "0") Then
+        signOfRem = ""
+    End If
+    
+    If (returnRemainder) Then
+        comDivideBaseNNumber = signOfRem & intPrtOfRem & IIf(frcPrtOfRem = "", "", DOT & frcPrtOfRem)
+        
+    Else
+        comDivideBaseNNumber = signOfAns & intPrtOfAns & IIf(frcPrtOfAns = "", "", DOT & frcPrtOfAns)
+        
+    End If
 
 End Function
 
