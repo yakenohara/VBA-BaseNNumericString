@@ -341,7 +341,6 @@ End Function
 '引数が不正の場合は、以下に応じたCvErrを返却する
 '    ・radixが2~16以外か、数値列はn進値として不正の場合(エラーコードは#NUM!)
 '    ・数値列が空文字かNullの場合(エラーコードは#NULL!)
-'    ・limitOfFrcDigitsが(-)値 (エラーコードは#NUM!)
 '
 '以下の場合は、エラーコードを返却する
 '    ・0割の場合(エラーコードは#DIV/0!)
@@ -349,6 +348,12 @@ End Function
 '
 'limitOfFrcDigits(Optional)
 '    求める小数点以下桁数
+'    0を設定した場合は、小数点以下は求めない
+'    (-)値を設定した場合は、その値を(-1)倍した桁を残した状態で、除算を打ち切る
+'    ex:)
+'    【前提】512 / 3 = 100 余り 212
+'    【実行方法】x = divideBaseNNumber("500", "3", 10, -2)
+'    【結果】 x:100
 '
 Public Function divideBaseNNumber(ByVal dividend As String, ByVal divisor As String, Optional ByVal radix As Byte = 10, Optional ByVal limitOfFrcDigits As Long = DEFAULT_LIMIT_OF_FRC_DIGITS) As Variant
 
@@ -387,14 +392,8 @@ Public Function divideBaseNNumber(ByVal dividend As String, ByVal divisor As Str
         
     End If
     
-    If (limitOfFrcDigits < 0) Then '小数点以下桁数指定が0未満
-        divideBaseNNumber = CVErr(xlErrNum) '#NUM!を返す
-        Exit Function
-        
-    End If
-    
-    '除算 - 乗数に小数点以下がある場合は、その桁数を小数点以下算出回数に加えないといけない -
-    tmpAns = divide(intPrtOfVal1 & frcPrtOfVal1, intPrtOfVal2 & frcPrtOfVal2, radix, limitOfFrcDigits + Len(frcPrtOfVal2), rm, stsOfSub)
+    '除算 - 除数に小数点以下がある場合は、その桁数を小数点以下算出回数に加えないといけない -
+    tmpAns = divide(intPrtOfVal1 & frcPrtOfVal1, intPrtOfVal2 & frcPrtOfVal2, radix, limitOfFrcDigits + Len(frcPrtOfVal2) - Len(frcPrtOfVal1), rm, stsOfSub)
     
     If IsError(stsOfSub) Then '除算処理でエラー
         divideBaseNNumber = stsOfSub 'divideのエラーコードを返す
