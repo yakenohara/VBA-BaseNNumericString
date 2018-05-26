@@ -336,7 +336,7 @@ Public Function multipleBaseNNumber(ByVal multiplicand As String, ByVal multipli
 End Function
 
 '
-'1st引数を2nd引数で除算する
+'1st引数を2nd引数で除算した商を返す
 '
 '引数が不正の場合は、以下に応じたCvErrを返却する
 '    ・radixが2~16以外か、数値列はn進値として不正の場合(エラーコードは#NUM!)
@@ -352,25 +352,77 @@ End Function
 '    (-)値を設定した場合は、その値を(-1)倍した桁を残した状態で、除算を打ち切る
 '    ex:)
 '    【前提】512 / 3 = 100 余り 212
-'    【実行方法】x = divideBaseNNumber("500", "3", 10, -2)
+'    【実行方法】x = divideBaseNNumber("512", "3", 10, -2)
 '    【結果】 x:100
 '
 Public Function divideBaseNNumber(ByVal dividend As String, ByVal divisor As String, Optional ByVal radix As Byte = 10, Optional ByVal limitOfFrcDigits As Long = DEFAULT_LIMIT_OF_FRC_DIGITS) As Variant
     
-    divideBaseNNumber = comDivideBaseNNumber(dividend, divisor, radix, False, limitOfFrcDigits)
+    Dim rm As String
+    
+    divideBaseNNumber = quotAndRemdOfDivideBaseNNumber(dividend, divisor, radix, rm, limitOfFrcDigits)
     
 End Function
 
+'
+'1st引数を2nd引数で除算した余りを返す
+'
+'引数が不正の場合は、以下に応じたCvErrを返却する
+'    ・radixが2~16以外か、数値列はn進値として不正の場合(エラーコードは#NUM!)
+'    ・数値列が空文字かNullの場合(エラーコードは#NULL!)
+'
+'以下の場合は、エラーコードを返却する
+'    ・0割の場合(エラーコードは#DIV/0!)
+'    ・dividend / divisor の数値列内に、Long型で取り扱えない大きな数値がある場合。(エラーコードは#NUM!)
+'
+'limitOfFrcDigits(Optional)
+'    求める小数点以下桁数
+'    0を設定した場合は、小数点以下は求めない
+'    (-)値を設定した場合は、その値を(-1)倍した桁を残した状態で、除算を打ち切る
+'    ex:)
+'    【前提】512 / 3 = 100 余り 212
+'    【実行方法】x = divideBaseNNumberRem("512", "3", 10, -2)
+'    【結果】 x:212
+'
 Public Function divideBaseNNumberRem(ByVal dividend As String, ByVal divisor As String, Optional ByVal radix As Byte = 10, Optional ByVal limitOfFrcDigits As Long = DEFAULT_LIMIT_OF_FRC_DIGITS) As Variant
     
-    divideBaseNNumberRem = comDivideBaseNNumber(dividend, divisor, radix, True, limitOfFrcDigits)
+    Dim rm As String
+    Dim returnOfSub As Variant
+    
+    returnOfSub = quotAndRemdOfDivideBaseNNumber(dividend, divisor, radix, rm, limitOfFrcDigits)
+    
+    If IsError(returnOfSub) Then '除算エラーの場合
+        divideBaseNNumberRem = returnOfSub
+        
+    Else
+        divideBaseNNumberRem = rm
+        
+    End If
     
 End Function
 
 '
-'public divide 用共通関数
+'1st引数を2nd引数で除算した商と余りを返す
+'商は返却値、余りはremainder(ByRef)に格納する
 '
-Private Function comDivideBaseNNumber(ByVal dividend As String, ByVal divisor As String, ByVal radix As Byte, ByVal returnRemainder As Boolean, ByVal limitOfFrcDigits As Long) As Variant
+'引数が不正の場合は、以下に応じたCvErrを返却する
+'    ・radixが2~16以外か、数値列はn進値として不正の場合(エラーコードは#NUM!)
+'    ・数値列が空文字かNullの場合(エラーコードは#NULL!)
+'
+'以下の場合は、エラーコードを返却する
+'    ・0割の場合(エラーコードは#DIV/0!)
+'    ・dividend / divisor の数値列内に、Long型で取り扱えない大きな数値がある場合。(エラーコードは#NUM!)
+'
+'limitOfFrcDigits(Optional)
+'    求める小数点以下桁数
+'    0を設定した場合は、小数点以下は求めない
+'    (-)値を設定した場合は、その値を(-1)倍した桁を残した状態で、除算を打ち切る
+'    ex:)
+'    【前提】512 / 3 = 100 余り 212
+'    【実行方法】x = quotAndRemdOfDivideBaseNNumber("512", "3", 10, r, -2)
+'    【結果】 x:100
+'             r:212
+'
+Public Function quotAndRemdOfDivideBaseNNumber(ByVal dividend As String, ByVal divisor As String, ByVal radix As Byte, ByRef remainder As String, ByVal limitOfFrcDigits As Long) As Variant
 
     Dim intPrtOfVal1 As String
     Dim frcPrtOfVal1 As String
@@ -397,7 +449,7 @@ Private Function comDivideBaseNNumber(ByVal dividend As String, ByVal divisor As
     'val1の文字列チェック&小数、整数分解
     stsOfSub = separateToIntAndFrc(dividend, radix, True, intPrtOfVal1, frcPrtOfVal1, isMinusOfVal1)
     If IsError(stsOfSub) Then 'val1はn進値として不正
-        comDivideBaseNNumber = stsOfSub 'checkBaseNNumberのエラーコードを返す
+        quotAndRemdOfDivideBaseNNumber = stsOfSub 'checkBaseNNumberのエラーコードを返す
         Exit Function
         
     End If
@@ -405,7 +457,7 @@ Private Function comDivideBaseNNumber(ByVal dividend As String, ByVal divisor As
     'val2の文字列チェック&小数、整数分解
     stsOfSub = separateToIntAndFrc(divisor, radix, True, intPrtOfVal2, frcPrtOfVal2, isMinusOfVal2)
     If IsError(stsOfSub) Then 'val2はn進値として不正
-        comDivideBaseNNumber = stsOfSub 'checkBaseNNumberのエラーコードを返す
+        quotAndRemdOfDivideBaseNNumber = stsOfSub 'checkBaseNNumberのエラーコードを返す
         Exit Function
         
     End If
@@ -414,7 +466,7 @@ Private Function comDivideBaseNNumber(ByVal dividend As String, ByVal divisor As
     tmpAns = divide(intPrtOfVal1 & frcPrtOfVal1, intPrtOfVal2 & frcPrtOfVal2, radix, limitOfFrcDigits + Len(frcPrtOfVal2) - Len(frcPrtOfVal1), rm, stsOfSub)
     
     If IsError(stsOfSub) Then '除算処理でエラー
-        comDivideBaseNNumber = stsOfSub 'divideのエラーコードを返す
+        quotAndRemdOfDivideBaseNNumber = stsOfSub 'divideのエラーコードを返す
         Exit Function
         
     End If
@@ -483,14 +535,9 @@ Private Function comDivideBaseNNumber(ByVal dividend As String, ByVal divisor As
         signOfRem = ""
     End If
     
-    If (returnRemainder) Then
-        comDivideBaseNNumber = signOfRem & intPrtOfRem & IIf(frcPrtOfRem = "", "", DOT & frcPrtOfRem)
-        
-    Else
-        comDivideBaseNNumber = signOfAns & intPrtOfAns & IIf(frcPrtOfAns = "", "", DOT & frcPrtOfAns)
-        
-    End If
-
+    remainder = signOfRem & intPrtOfRem & IIf(frcPrtOfRem = "", "", DOT & frcPrtOfRem) '余りを格納
+    quotAndRemdOfDivideBaseNNumber = signOfAns & intPrtOfAns & IIf(frcPrtOfAns = "", "", DOT & frcPrtOfAns)
+    
 End Function
 
 '
@@ -1171,7 +1218,7 @@ End Function
 '    (-)値を設定した場合は、その値を(-1)倍した桁を残した状態で、除算を打ち切る
 '    ex:)
 '    【前提】512 / 3 = 100 余り 212
-'    【実行方法】x = divide("500", "3", 10, -2, rm, code)
+'    【実行方法】x = divide("512", "3", 10, -2, rm, code)
 '    【結果】 x:100
 '            rm:212
 '
