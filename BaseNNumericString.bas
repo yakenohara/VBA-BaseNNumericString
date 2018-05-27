@@ -15,7 +15,7 @@ Const DEFAULT_LIMIT_OF_FRC_DIGITS As Long = 30
 '    ・radixが2~16以外か、数値列はn進値として不正の場合(エラーコードは#NUM!)
 '    ・数値列が空文字かNullの場合(エラーコードは#NULL!)
 '
-Public Function addBaseNNumber(ByVal val1 As String, ByVal val2 As String, Optional ByVal radix As Byte = 10) As Variant
+Public Function baseNAddition(ByVal val1 As String, ByVal val2 As String, Optional ByVal radix As Byte = 10) As Variant
     
     Dim intPrtOfVal1 As String
     Dim frcPrtOfVal1 As String
@@ -41,7 +41,7 @@ Public Function addBaseNNumber(ByVal val1 As String, ByVal val2 As String, Optio
     'val1の文字列チェック&小数、整数分解
     stsOfSub = separateToIntAndFrc(val1, radix, True, intPrtOfVal1, frcPrtOfVal1, isMinusOfVal1)
     If IsError(stsOfSub) Then 'val1はn進値として不正
-        addBaseNNumber = stsOfSub 'checkBaseNNumberのエラーコードを返す
+        baseNAddition = stsOfSub 'checkBaseNNumberのエラーコードを返す
         Exit Function
         
     End If
@@ -49,7 +49,7 @@ Public Function addBaseNNumber(ByVal val1 As String, ByVal val2 As String, Optio
     'val2の文字列チェック&小数、整数分解
     stsOfSub = separateToIntAndFrc(val2, radix, True, intPrtOfVal2, frcPrtOfVal2, isMinusOfVal2)
     If IsError(stsOfSub) Then 'val2はn進値として不正
-        addBaseNNumber = stsOfSub 'checkBaseNNumberのエラーコードを返す
+        baseNAddition = stsOfSub 'checkBaseNNumberのエラーコードを返す
         Exit Function
         
     End If
@@ -121,7 +121,7 @@ Public Function addBaseNNumber(ByVal val1 As String, ByVal val2 As String, Optio
         signOfAns = ""
     End If
     
-    addBaseNNumber = signOfAns & intPrtOfAns & IIf(frcPrtOfAns = "", "", DOT & frcPrtOfAns)
+    baseNAddition = signOfAns & intPrtOfAns & IIf(frcPrtOfAns = "", "", DOT & frcPrtOfAns)
 
 End Function
 
@@ -132,7 +132,7 @@ End Function
 '    ・radixが2~16以外か、数値列はn進値として不正の場合(エラーコードは#NUM!)
 '    ・数値列が空文字かNullの場合(エラーコードは#NULL!)
 '
-Public Function multipleBaseNNumber(ByVal multiplicand As String, ByVal multiplier As String, Optional radix As Byte = 10) As Variant
+Public Function baseNMultiplication(ByVal multiplicand As String, ByVal multiplier As String, Optional radix As Byte = 10) As Variant
 
     Dim intPrtOfVal1 As String
     Dim frcPrtOfVal1 As String
@@ -155,7 +155,7 @@ Public Function multipleBaseNNumber(ByVal multiplicand As String, ByVal multipli
     'val1の文字列チェック&小数、整数分解
     stsOfSub = separateToIntAndFrc(multiplicand, radix, True, intPrtOfVal1, frcPrtOfVal1, isMinusOfVal1)
     If IsError(stsOfSub) Then 'val1はn進値として不正
-        multipleBaseNNumber = stsOfSub 'checkBaseNNumberのエラーコードを返す
+        baseNMultiplication = stsOfSub 'checkBaseNNumberのエラーコードを返す
         Exit Function
         
     End If
@@ -163,7 +163,7 @@ Public Function multipleBaseNNumber(ByVal multiplicand As String, ByVal multipli
     'val2の文字列チェック&小数、整数分解
     stsOfSub = separateToIntAndFrc(multiplier, radix, True, intPrtOfVal2, frcPrtOfVal2, isMinusOfVal2)
     If IsError(stsOfSub) Then 'val2はn進値として不正
-        multipleBaseNNumber = stsOfSub 'checkBaseNNumberのエラーコードを返す
+        baseNMultiplication = stsOfSub 'checkBaseNNumberのエラーコードを返す
         Exit Function
         
     End If
@@ -214,7 +214,7 @@ Public Function multipleBaseNNumber(ByVal multiplicand As String, ByVal multipli
         signOfAns = ""
     End If
     
-    multipleBaseNNumber = signOfAns & intPrtOfAns & IIf(frcPrtOfAns = "", "", DOT & frcPrtOfAns)
+    baseNMultiplication = signOfAns & intPrtOfAns & IIf(frcPrtOfAns = "", "", DOT & frcPrtOfAns)
 
 End Function
 
@@ -235,14 +235,14 @@ End Function
 '    (-)値を設定した場合は、その値を(-1)倍した桁を残した状態で、除算を打ち切る
 '    ex:)
 '    【前提】512 / 3 = 100 余り 212
-'    【実行方法】x = divideBaseNNumber("512", "3", 10, -2)
+'    【実行方法】x = baseNDivision("512", "3", 10, -2)
 '    【結果】 x:100
 '
-Public Function divideBaseNNumber(ByVal dividend As String, ByVal divisor As String, Optional ByVal radix As Byte = 10, Optional ByVal limitOfFrcDigits As Long = DEFAULT_LIMIT_OF_FRC_DIGITS) As Variant
+Public Function baseNDivision(ByVal dividend As String, ByVal divisor As String, Optional ByVal radix As Byte = 10, Optional ByVal limitOfFrcDigits As Long = DEFAULT_LIMIT_OF_FRC_DIGITS) As Variant
     
     Dim rm As String
     
-    divideBaseNNumber = quotAndRemdOfDivideBaseNNumber(dividend, divisor, radix, rm, limitOfFrcDigits)
+    baseNDivision = quotAndRemdOfBaseNDivision(dividend, divisor, radix, rm, limitOfFrcDigits)
     
 End Function
 
@@ -263,21 +263,21 @@ End Function
 '    (-)値を設定した場合は、その値を(-1)倍した桁を残した状態で、除算を打ち切る
 '    ex:)
 '    【前提】512 / 3 = 100 余り 212
-'    【実行方法】x = divideBaseNNumberRem("512", "3", 10, -2)
+'    【実行方法】x = baseNDivisionRem("512", "3", 10, -2)
 '    【結果】 x:212
 '
-Public Function divideBaseNNumberRem(ByVal dividend As String, ByVal divisor As String, Optional ByVal radix As Byte = 10, Optional ByVal limitOfFrcDigits As Long = DEFAULT_LIMIT_OF_FRC_DIGITS) As Variant
+Public Function baseNDivisionRem(ByVal dividend As String, ByVal divisor As String, Optional ByVal radix As Byte = 10, Optional ByVal limitOfFrcDigits As Long = DEFAULT_LIMIT_OF_FRC_DIGITS) As Variant
     
     Dim rm As String
     Dim returnOfSub As Variant
     
-    returnOfSub = quotAndRemdOfDivideBaseNNumber(dividend, divisor, radix, rm, limitOfFrcDigits)
+    returnOfSub = quotAndRemdOfBaseNDivision(dividend, divisor, radix, rm, limitOfFrcDigits)
     
     If IsError(returnOfSub) Then '除算エラーの場合
-        divideBaseNNumberRem = returnOfSub
+        baseNDivisionRem = returnOfSub
         
     Else
-        divideBaseNNumberRem = rm
+        baseNDivisionRem = rm
         
     End If
     
@@ -301,11 +301,11 @@ End Function
 '    (-)値を設定した場合は、その値を(-1)倍した桁を残した状態で、除算を打ち切る
 '    ex:)
 '    【前提】512 / 3 = 100 余り 212
-'    【実行方法】x = quotAndRemdOfDivideBaseNNumber("512", "3", 10, r, -2)
+'    【実行方法】x = quotAndRemdOfBaseNDivision("512", "3", 10, r, -2)
 '    【結果】 x:100
 '             r:212
 '
-Public Function quotAndRemdOfDivideBaseNNumber(ByVal dividend As String, ByVal divisor As String, ByVal radix As Byte, ByRef remainder As String, ByVal limitOfFrcDigits As Long) As Variant
+Public Function quotAndRemdOfBaseNDivision(ByVal dividend As String, ByVal divisor As String, ByVal radix As Byte, ByRef remainder As String, ByVal limitOfFrcDigits As Long) As Variant
 
     Dim intPrtOfVal1 As String
     Dim frcPrtOfVal1 As String
@@ -332,7 +332,7 @@ Public Function quotAndRemdOfDivideBaseNNumber(ByVal dividend As String, ByVal d
     'val1の文字列チェック&小数、整数分解
     stsOfSub = separateToIntAndFrc(dividend, radix, True, intPrtOfVal1, frcPrtOfVal1, isMinusOfVal1)
     If IsError(stsOfSub) Then 'val1はn進値として不正
-        quotAndRemdOfDivideBaseNNumber = stsOfSub 'checkBaseNNumberのエラーコードを返す
+        quotAndRemdOfBaseNDivision = stsOfSub 'checkBaseNNumberのエラーコードを返す
         Exit Function
         
     End If
@@ -340,7 +340,7 @@ Public Function quotAndRemdOfDivideBaseNNumber(ByVal dividend As String, ByVal d
     'val2の文字列チェック&小数、整数分解
     stsOfSub = separateToIntAndFrc(divisor, radix, True, intPrtOfVal2, frcPrtOfVal2, isMinusOfVal2)
     If IsError(stsOfSub) Then 'val2はn進値として不正
-        quotAndRemdOfDivideBaseNNumber = stsOfSub 'checkBaseNNumberのエラーコードを返す
+        quotAndRemdOfBaseNDivision = stsOfSub 'checkBaseNNumberのエラーコードを返す
         Exit Function
         
     End If
@@ -349,7 +349,7 @@ Public Function quotAndRemdOfDivideBaseNNumber(ByVal dividend As String, ByVal d
     tmpAns = divide(intPrtOfVal1 & frcPrtOfVal1, intPrtOfVal2 & frcPrtOfVal2, radix, limitOfFrcDigits + Len(frcPrtOfVal2) - Len(frcPrtOfVal1), rm, stsOfSub)
     
     If IsError(stsOfSub) Then '除算処理でエラー
-        quotAndRemdOfDivideBaseNNumber = stsOfSub 'divideのエラーコードを返す
+        quotAndRemdOfBaseNDivision = stsOfSub 'divideのエラーコードを返す
         Exit Function
         
     End If
@@ -419,7 +419,7 @@ Public Function quotAndRemdOfDivideBaseNNumber(ByVal dividend As String, ByVal d
     End If
     
     remainder = signOfRem & intPrtOfRem & IIf(frcPrtOfRem = "", "", DOT & frcPrtOfRem) '余りを格納
-    quotAndRemdOfDivideBaseNNumber = signOfAns & intPrtOfAns & IIf(frcPrtOfAns = "", "", DOT & frcPrtOfAns)
+    quotAndRemdOfBaseNDivision = signOfAns & intPrtOfAns & IIf(frcPrtOfAns = "", "", DOT & frcPrtOfAns)
     
 End Function
 
@@ -439,7 +439,7 @@ End Function
 'limitOfFrcDigits(Optional):
 '    小数点以下の求める桁数
 '
-Public Function convRadix(ByVal baseNNumericStr As String, ByVal fromRadix As Byte, ByVal toRadix As Byte, Optional ByVal limitOfFrcDigits As Long = DEFAULT_LIMIT_OF_FRC_DIGITS) As Variant
+Public Function baseNConv(ByVal baseNNumericStr As String, ByVal fromRadix As Byte, ByVal toRadix As Byte, Optional ByVal limitOfFrcDigits As Long = DEFAULT_LIMIT_OF_FRC_DIGITS) As Variant
     
     Dim intPrtOfFrom As String
     Dim frcPrtOfFrom As String
@@ -454,14 +454,14 @@ Public Function convRadix(ByVal baseNNumericStr As String, ByVal fromRadix As By
     '文字列チェック&小数、整数分解
     stsOfSub = separateToIntAndFrc(baseNNumericStr, fromRadix, True, intPrtOfFrom, frcPrtOfFrom, isMinusOfFrom)
     If IsError(stsOfSub) Then 'n進値として不正
-        convRadix = stsOfSub 'checkBaseNNumberのエラーコードを返す
+        baseNConv = stsOfSub 'checkBaseNNumberのエラーコードを返す
         Exit Function
         
     End If
     
     'toRadixの範囲チェック
     If ((toRadix < 2) Or (16 < toRadix)) Then '変換先基数は2~16の範囲外
-        convRadix = CVErr(xlErrNum) '#NUM!を返す
+        baseNConv = CVErr(xlErrNum) '#NUM!を返す
         Exit Function
         
     End If
@@ -487,7 +487,7 @@ Public Function convRadix(ByVal baseNNumericStr As String, ByVal fromRadix As By
     
     End If
     
-    convRadix = signOfAns & intPrtOfAns & IIf(frcPrtOfAns = "", "", DOT & frcPrtOfAns)
+    baseNConv = signOfAns & intPrtOfAns & IIf(frcPrtOfAns = "", "", DOT & frcPrtOfAns)
     
 End Function
 
@@ -498,7 +498,7 @@ End Function
 '    ・radixが2~16以外か、数値列はn進値として不正の場合(エラーコードは#NUM!)
 '    ・数値列が空文字かNullの場合(エラーコードは#NULL!)
 '
-Public Function getDiminishedRadixComplement(ByVal baseNNumericStr As String, ByVal radix As Byte) As Variant
+Public Function baseNMinus1sComplement(ByVal baseNNumericStr As String, ByVal radix As Byte) As Variant
     
     Dim intPrtOfVal1 As String
     Dim frcPrtOfVal1 As String
@@ -518,7 +518,7 @@ Public Function getDiminishedRadixComplement(ByVal baseNNumericStr As String, By
     '文字列チェック&小数、整数分解
     stsOfSub = separateToIntAndFrc(baseNNumericStr, radix, False, intPrtOfVal1, frcPrtOfVal1, isMinusOfVal1)
     If IsError(stsOfSub) Then 'val1はn進値として不正
-        getDiminishedRadixComplement = stsOfSub 'checkBaseNNumberのエラーコードを返す
+        baseNMinus1sComplement = stsOfSub 'checkBaseNNumberのエラーコードを返す
         Exit Function
         
     End If
@@ -548,7 +548,7 @@ Public Function getDiminishedRadixComplement(ByVal baseNNumericStr As String, By
         
     End If
     
-    getDiminishedRadixComplement = signOfAns & intPrtOfAns & IIf(frcPrtOfAns = "", "", DOT & frcPrtOfAns)
+    baseNMinus1sComplement = signOfAns & intPrtOfAns & IIf(frcPrtOfAns = "", "", DOT & frcPrtOfAns)
     
 
 End Function
@@ -1623,7 +1623,3 @@ Private Function invertStringArray(ByRef srcArr() As String) As String()
     invertStringArray = retArr
     
 End Function
-
-
-
-
