@@ -9,11 +9,19 @@ Const DEFAULT_LIMIT_OF_FRC_DIGITS As Long = 30
 '-----------------------------------------------------------------------------------------</定数>
 
 '
-'2数を加算する
+'加算
 '
-'引数が不正の場合は、以下に応じたCvErrを返却する
-'    ・radixが2~16以外か、数値列はn進値として不正の場合(エラーコードは#NUM!)
-'    ・数値列が空文字かNullの場合(エラーコードは#NULL!)
+'パラメータ:
+'  val1  - 足される数
+'  val2  - 足す数
+'  radix - 基数(Optional) 省略した場合は、10とみなします
+'
+'
+'戻り値:
+'  加算結果
+'  パラメータが不正の場合は、以下に応じたCvErrを返却する
+'    ・val1 / val2 が空文字かNullの場合(エラーコードは#NULL!)
+'    ・radixが2~16以外か、val1 / val2 はn進値として不正の場合(エラーコードは#NUM!)
 '
 Public Function baseNAddition(ByVal val1 As String, ByVal val2 As String, Optional ByVal radix As Byte = 10) As Variant
     
@@ -126,11 +134,19 @@ Public Function baseNAddition(ByVal val1 As String, ByVal val2 As String, Option
 End Function
 
 '
-'2数を乗算する
+'乗算
 '
-'引数が不正の場合は、以下に応じたCvErrを返却する
-'    ・radixが2~16以外か、数値列はn進値として不正の場合(エラーコードは#NUM!)
-'    ・数値列が空文字かNullの場合(エラーコードは#NULL!)
+'パラメータ:
+'  multiplicand - 被乗数
+'  multiplier   - 乗数
+'  radix        - 基数(Optional) 省略した場合は、10とみなします
+'
+'戻り値:
+'  乗算結果
+'  パラメータが不正の場合は、以下に応じたCvErrを返却する
+'    ・multiplicand / multiplier が空文字かNullの場合(エラーコードは#NULL!)
+'    ・radixが2~16以外か、multiplicand / multiplier はn進値として不正の場合(エラーコードは#NUM!)
+'
 '
 Public Function baseNMultiplication(ByVal multiplicand As String, ByVal multiplier As String, Optional radix As Byte = 10) As Variant
 
@@ -219,24 +235,27 @@ Public Function baseNMultiplication(ByVal multiplicand As String, ByVal multipli
 End Function
 
 '
-'1st引数を2nd引数で除算した商を返す
+'除算の商
 '
-'引数が不正の場合は、以下に応じたCvErrを返却する
-'    ・radixが2~16以外か、数値列はn進値として不正の場合(エラーコードは#NUM!)
-'    ・数値列が空文字かNullの場合(エラーコードは#NULL!)
+'パラメータ:
+'  dividend         - 被除数
+'  divisor          - 除数
+'  radix            - 基数(Optional) 省略した場合は、10とみなします
+'  limitOfFrcDigits - 求める小数点以下桁数の最大値(Optional) 省略した場合は、30とみなします
+'                     0を設定した場合は、小数点以下は求めません
+'                     (-)値を設定した場合は、その値を(-1)倍した桁を残した状態で、除算を打ち切ります
+'                       ex:)
+'                      【前提】512 / 3 = 100 余り 212
+'                      【実行方法】x = baseNDivision("512", "3", 10, -2)
+'                      【結果】 x:100
 '
-'以下の場合は、エラーコードを返却する
+'戻り値:
+'  除算の商
+'  以下の場合は、エラーコードを返却します
 '    ・0割の場合(エラーコードは#DIV/0!)
-'    ・dividend / divisor の数値列内に、Long型で取り扱えない大きな数値がある場合。(エラーコードは#NUM!)
-'
-'limitOfFrcDigits(Optional)
-'    求める小数点以下桁数
-'    0を設定した場合は、小数点以下は求めない
-'    (-)値を設定した場合は、その値を(-1)倍した桁を残した状態で、除算を打ち切る
-'    ex:)
-'    【前提】512 / 3 = 100 余り 212
-'    【実行方法】x = baseNDivision("512", "3", 10, -2)
-'    【結果】 x:100
+'    ・dividend / divisor の数値列内に、Long型で取り扱えない大きな数値がある場合(エラーコードは#NUM!)
+'    ・dividend / divisor が空文字かNullの場合(エラーコードは#NULL!)
+'    ・radixが2~16以外か、数値列はn進値として不正の場合(エラーコードは#NUM!)
 '
 Public Function baseNDivision(ByVal dividend As String, ByVal divisor As String, Optional ByVal radix As Byte = 10, Optional ByVal limitOfFrcDigits As Long = DEFAULT_LIMIT_OF_FRC_DIGITS) As Variant
     
@@ -247,24 +266,27 @@ Public Function baseNDivision(ByVal dividend As String, ByVal divisor As String,
 End Function
 
 '
-'1st引数を2nd引数で除算した余りを返す
+'除算の余り
 '
-'引数が不正の場合は、以下に応じたCvErrを返却する
-'    ・radixが2~16以外か、数値列はn進値として不正の場合(エラーコードは#NUM!)
-'    ・数値列が空文字かNullの場合(エラーコードは#NULL!)
+'パラメータ:
+'  dividend         - 被除数
+'  divisor          - 除数
+'  radix            - 基数(Optional) 省略した場合は、10とみなします
+'  limitOfFrcDigits - 求める小数点以下桁数の最大値(Optional) 省略した場合は、30とみなします
+'                     0を設定した場合は、小数点以下は求めません
+'                     (-)値を設定した場合は、その値を(-1)倍した桁を残した状態で、除算を打ち切ります
+'                       ex:)
+'                      【前提】512 / 3 = 100 余り 212
+'                      【実行方法】x = baseNDivisionRem("512", "3", 10, -2)
+'                      【結果】 x:212
 '
-'以下の場合は、エラーコードを返却する
+'戻り値:
+'  除算の余り
+'  以下の場合は、エラーコードを返却します
 '    ・0割の場合(エラーコードは#DIV/0!)
-'    ・dividend / divisor の数値列内に、Long型で取り扱えない大きな数値がある場合。(エラーコードは#NUM!)
-'
-'limitOfFrcDigits(Optional)
-'    求める小数点以下桁数
-'    0を設定した場合は、小数点以下は求めない
-'    (-)値を設定した場合は、その値を(-1)倍した桁を残した状態で、除算を打ち切る
-'    ex:)
-'    【前提】512 / 3 = 100 余り 212
-'    【実行方法】x = baseNDivisionRem("512", "3", 10, -2)
-'    【結果】 x:212
+'    ・dividend / divisor の数値列内に、Long型で取り扱えない大きな数値がある場合(エラーコードは#NUM!)
+'    ・dividend / divisor が空文字かNullの場合(エラーコードは#NULL!)
+'    ・radixが2~16以外か、数値列はn進値として不正の場合(エラーコードは#NUM!)
 '
 Public Function baseNDivisionRem(ByVal dividend As String, ByVal divisor As String, Optional ByVal radix As Byte = 10, Optional ByVal limitOfFrcDigits As Long = DEFAULT_LIMIT_OF_FRC_DIGITS) As Variant
     
@@ -284,28 +306,31 @@ Public Function baseNDivisionRem(ByVal dividend As String, ByVal divisor As Stri
 End Function
 
 '
-'1st引数を2nd引数で除算した商と余りを返す
-'商は返却値、余りはremainder(ByRef)に格納する
+'除算の商と余り
 '
-'引数が不正の場合は、以下に応じたCvErrを返却する
-'    ・radixが2~16以外か、数値列はn進値として不正の場合(エラーコードは#NUM!)
-'    ・数値列が空文字かNullの場合(エラーコードは#NULL!)
+'パラメータ:
+'  dividend         - 被除数
+'  divisor          - 除数
+'  radix            - 基数(Optional) 省略した場合は、10とみなします
+'  remainder        - 余り(参照渡し)
+'  limitOfFrcDigits - 求める小数点以下桁数の最大値(Optional) 省略した場合は、30とみなします
+'                     0を設定した場合は、小数点以下は求めません
+'                     (-)値を設定した場合は、その値を(-1)倍した桁を残した状態で、除算を打ち切ります
+'                       ex:)
+'                     【前提】512 / 3 = 100 余り 212
+'                     【実行方法】x = quotAndRemdOfBaseNDivision("512", "3", 10, r, -2)
+'                     【結果】 x:100
+'                              r:212
 '
-'以下の場合は、エラーコードを返却する
+'戻り値:
+'  パラメータのremainderに除算の余りを格納し、除算の商を返却します
+'  以下の場合は、エラーコードを返却します
 '    ・0割の場合(エラーコードは#DIV/0!)
-'    ・dividend / divisor の数値列内に、Long型で取り扱えない大きな数値がある場合。(エラーコードは#NUM!)
+'    ・dividend / divisor の数値列内に、Long型で取り扱えない大きな数値がある場合(エラーコードは#NUM!)
+'    ・dividend / divisor が空文字かNullの場合(エラーコードは#NULL!)
+'    ・radixが2~16以外か、数値列はn進値として不正の場合(エラーコードは#NUM!)
 '
-'limitOfFrcDigits(Optional)
-'    求める小数点以下桁数
-'    0を設定した場合は、小数点以下は求めない
-'    (-)値を設定した場合は、その値を(-1)倍した桁を残した状態で、除算を打ち切る
-'    ex:)
-'    【前提】512 / 3 = 100 余り 212
-'    【実行方法】x = quotAndRemdOfBaseNDivision("512", "3", 10, r, -2)
-'    【結果】 x:100
-'             r:212
-'
-Public Function quotAndRemdOfBaseNDivision(ByVal dividend As String, ByVal divisor As String, ByVal radix As Byte, ByRef remainder As String, ByVal limitOfFrcDigits As Long) As Variant
+Public Function quotAndRemdOfBaseNDivision(ByVal dividend As String, ByVal divisor As String, ByVal radix As Byte, ByRef remainder As String, Optional ByVal limitOfFrcDigits As Long = DEFAULT_LIMIT_OF_FRC_DIGITS) As Variant
 
     Dim intPrtOfVal1 As String
     Dim frcPrtOfVal1 As String
@@ -425,19 +450,18 @@ End Function
 
 '
 'n進数をn進数に変換する
-'引数が不正の場合は、以下に応じたCvErrを返却する
-'    ・fromRadix or toRadix が2~16以外か、数値列はfromRadix進値として不正の場合(エラーコードは#NUM!)
-'    ・変換元数値列が空文字かNullの場合(エラーコードは#NULL!)
+'
+'パラメータ:
+'  baseNNumericStr  - 変換元数値
+'  fromRadix        - 変換元数値の基数
+'  toRadix          - 変換先数値の基数
+'  limitOfFrcDigits - 小数点以下の求める桁数(Optional)
+'
+'戻り値:
+'  パラメータが不正の場合は、以下に応じたCvErrを返却します
+'    ・fromRadix / toRadix が2~16以外か、baseNNumericStrはfromRadix進値として不正の場合(エラーコードは#NUM!)
+'    ・baseNNumericStrが空文字かNullの場合(エラーコードは#NULL!)
 '    ・limitOfFrcDigitsが(-)値 (エラーコードは#NUM!)
-'
-'fromRadix:
-'    変換元数値列の基数
-'
-'toRadix:
-'    変換先数値列の基数
-'
-'limitOfFrcDigits(Optional):
-'    小数点以下の求める桁数
 '
 Public Function baseNConv(ByVal baseNNumericStr As String, ByVal fromRadix As Byte, ByVal toRadix As Byte, Optional ByVal limitOfFrcDigits As Long = DEFAULT_LIMIT_OF_FRC_DIGITS) As Variant
     
@@ -494,7 +518,14 @@ End Function
 '
 '減基数の補数を得る
 '
-'引数が不正の場合は、以下に応じたCvErrを返却する
+'
+'パラメータ:
+'  baseNNumericStr  - 変換元数値
+'  radix            - 基数
+'
+'戻り値:
+'  減基数の補数
+'  パラメータが不正の場合は、以下に応じたCvErrを返却する
 '    ・radixが2~16以外か、数値列はn進値として不正の場合(エラーコードは#NUM!)
 '    ・数値列が空文字かNullの場合(エラーコードは#NULL!)
 '
@@ -1623,3 +1654,5 @@ Private Function invertStringArray(ByRef srcArr() As String) As String()
     invertStringArray = retArr
     
 End Function
+
+
