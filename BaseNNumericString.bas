@@ -12,8 +12,8 @@ Const DEFAULT_LIMIT_OF_FRC_DIGITS As Long = 30
 '加算
 '
 'パラメータ:
-'  val1  - 足される数
-'  val2  - 足す数
+'  val1  - 足される数(String型)
+'  val2  - 足す数(String型)
 '  radix - 基数(Optional) 省略した場合は、10とみなします
 '
 '
@@ -137,8 +137,8 @@ End Function
 '乗算
 '
 'パラメータ:
-'  multiplicand - 被乗数
-'  multiplier   - 乗数
+'  multiplicand - 被乗数(String型)
+'  multiplier   - 乗数(String型)
 '  radix        - 基数(Optional) 省略した場合は、10とみなします
 '
 '戻り値:
@@ -238,8 +238,8 @@ End Function
 '除算の商
 '
 'パラメータ:
-'  dividend         - 被除数
-'  divisor          - 除数
+'  dividend         - 被除数(String型)
+'  divisor          - 除数(String型)
 '  radix            - 基数(Optional) 省略した場合は、10とみなします
 '  limitOfFrcDigits - 求める小数点以下桁数の最大値(Optional) 省略した場合は、30とみなします
 '                     0を設定した場合は、小数点以下は求めません
@@ -269,8 +269,8 @@ End Function
 '除算の余り
 '
 'パラメータ:
-'  dividend         - 被除数
-'  divisor          - 除数
+'  dividend         - 被除数(String型)
+'  divisor          - 除数(String型)
 '  radix            - 基数(Optional) 省略した場合は、10とみなします
 '  limitOfFrcDigits - 求める小数点以下桁数の最大値(Optional) 省略した場合は、30とみなします
 '                     0を設定した場合は、小数点以下は求めません
@@ -309,8 +309,8 @@ End Function
 '除算の商と余り
 '
 'パラメータ:
-'  dividend         - 被除数
-'  divisor          - 除数
+'  dividend         - 被除数(String型)
+'  divisor          - 除数(String型)
 '  radix            - 基数(Optional) 省略した場合は、10とみなします
 '  remainder        - 余り(参照渡し)
 '  limitOfFrcDigits - 求める小数点以下桁数の最大値(Optional) 省略した場合は、30とみなします
@@ -452,7 +452,7 @@ End Function
 'n進数をn進数に変換する
 '
 'パラメータ:
-'  baseNNumericStr  - 変換元数値
+'  baseNNumericStr  - 変換元数値(String型)
 '  fromRadix        - 変換元数値の基数
 '  toRadix          - 変換先数値の基数
 '  limitOfFrcDigits - 小数点以下の求める桁数(Optional)
@@ -520,7 +520,7 @@ End Function
 '
 '
 'パラメータ:
-'  baseNNumericStr  - 変換元数値
+'  baseNNumericStr  - 変換元数値(String型)
 '  radix            - 基数
 '
 '戻り値:
@@ -1654,5 +1654,4 @@ Private Function invertStringArray(ByRef srcArr() As String) As String()
     invertStringArray = retArr
     
 End Function
-
 
