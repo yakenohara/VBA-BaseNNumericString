@@ -22,8 +22,7 @@ Attribute VB_Name = "BaseNNumericString"
 
 Private Const DOT As String = "." '小数点表記
 
-'割り切れない数値に対して何回割り算するか
-Const DEFAULT_LIMIT_OF_FRC_DIGITS As Long = 30
+Const DEFAULT_LIMIT_OF_FRC_DIGITS As Long = 30 '求める小数点以下の最大桁数
 '
 '-----------------------------------------------------------------------------------------</定数>
 
