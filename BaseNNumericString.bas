@@ -1,20 +1,20 @@
 Attribute VB_Name = "BaseNNumericString"
 '<License>------------------------------------------------------------
 '
-'Copyright (c) 2018 Shinnosuke Yakenohara
+' Copyright (c) 2018 Shinnosuke Yakenohara
 '
-'This program is free software: you can redistribute it and/or modify
-'it under the terms of the GNU General Public License as published by
-'the Free Software Foundation, either version 3 of the License, or
-'(at your option) any later version.
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
 '
-'This program is distributed in the hope that it will be useful,
-'but WITHOUT ANY WARRANTY; without even the implied warranty of
-'MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-'GNU General Public License for more details.
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
 '
-'You should have received a copy of the GNU General Public License
-'along with this program.  If not, see <http://www.gnu.org/licenses/>.
+' You should have received a copy of the GNU General Public License
+' along with this program.  If not, see <http://www.gnu.org/licenses/>.
 '
 '-----------------------------------------------------------</License>
 
@@ -22,9 +22,15 @@ Attribute VB_Name = "BaseNNumericString"
 
 Private Const DOT As String = "." '小数点表記
 
-Const DEFAULT_LIMIT_OF_FRC_DIGITS As Long = 30 '求める小数点以下の最大桁数
+Private Const DEFAULT_LIMIT_OF_FRC_DIGITS As Long = 30 '求める小数点以下の最大桁数
 '
 '-----------------------------------------------------------------------------------------</定数>
+
+'<変数>------------------------------------------------------------------------------------------
+
+Private oldSec As Byte
+'
+'-----------------------------------------------------------------------------------------</変数>
 
 '
 '加算
@@ -587,6 +593,7 @@ Public Function baseNMinus1sComplement(ByVal baseNNumericStr As String, ByVal ra
     '補数を求めるループ
     For lpCnt = lenOfTmpVal1 To 1 Step -1
         stringBuilder(lpCnt) = convByteToNChar((radix - 1) - convNCharToByte(Mid(tmpVal1, lpCnt, 1)))
+        Call callDoEvents '応答なし回避
         
     Next lpCnt
     
@@ -810,6 +817,8 @@ Private Function checkBaseNNumber(ByVal baseNNumericStr As String, ByVal radix A
             numOfDigits = numOfDigits + 1 'increment
         End If
         
+        Call callDoEvents '応答なし回避
+        
     Next cnt
     
     If (numOfDigits = 0) And (ngIdx = 0) Then '数値が見つからない場合
@@ -892,6 +901,8 @@ Private Function add(ByVal val1 As String, ByVal val2 As String, ByVal radix As 
         
         idxOfVal = idxOfVal - 1 'decrement
         
+        Call callDoEvents '応答なし回避
+        
     Loop
     
     '最上位桁格納
@@ -962,6 +973,8 @@ Private Function subtract(ByVal val1 As String, ByVal val2 As String, ByVal radi
         
         diffIdx = diffIdx + 1
         
+        Call callDoEvents '応答なし回避
+        
     Loop
     
     'val1とval2数は同じ数値の場合
@@ -1023,6 +1036,8 @@ Private Function subtract(ByVal val1 As String, ByVal val2 As String, ByVal radi
         
         idxOfVal = idxOfVal - 1 'decrement
         
+        Call callDoEvents '応答なし回避
+        
     Loop
     
     '最上位桁格納
@@ -1066,6 +1081,8 @@ Private Function multiple(ByVal multiplicand As String, ByVal multiplier As Stri
         End If
         
         numOfShift = numOfShift + 1
+        
+        Call callDoEvents '応答なし回避
         
     Next idxOfMultiplier
     
@@ -1133,6 +1150,8 @@ Private Function multipleByOneDigit(ByVal multiplicand As String, ByVal multipli
         stringBuilder(digitIdxOfMultiplicand) = digitOfAns
         
         digitIdxOfMultiplicand = digitIdxOfMultiplicand - 1 'decrement
+        
+        Call callDoEvents '応答なし回避
         
     Loop
     
@@ -1263,6 +1282,8 @@ Private Function divide(ByVal dividend As String, ByVal divisor As String, ByVal
             
         End If
         
+        Call callDoEvents '応答なし回避
+        
     Loop While digitIdxOfDividend <= Len(dividend) '最終文字に到達しない間
     
     '余り算出
@@ -1356,6 +1377,8 @@ Private Function convRadixOfInt(ByVal intStr As String, ByVal fromRadix As Byte,
         stringBuilder(sizeOfStringBuilder) = convRadixOfInt(rm, fromRadix, toRadix)
         
         sizeOfStringBuilder = sizeOfStringBuilder + 1
+        
+        Call callDoEvents '応答なし回避
         
     Loop
     
@@ -1451,6 +1474,8 @@ Private Function convRadixOfFrc(ByVal frcStr As String, ByVal fromRadix As Byte,
         
         lenOfFrcStrB = Len(frcStr)
         sizeOfStringBuilder = sizeOfStringBuilder + 1
+        
+        Call callDoEvents '応答なし回避
         
     Loop
     
@@ -1603,6 +1628,8 @@ Private Function removeLeft0(ByVal intStr As String) As String
         
         lpIdx = lpIdx + 1 'increment
         
+        Call callDoEvents '応答なし回避
+        
     Loop
     
     If (lpIdx > lpMx) Then '空文字 or すべて"0"な文字列
@@ -1644,6 +1671,8 @@ Private Function removeRight0(ByVal intStr As String) As String
         
         lpIdx = lpIdx - 1 'decrement
         
+        Call callDoEvents '応答なし回避
+        
     Loop
     
     If (lpIdx = 0) Then  '空文字 or すべて"0"な文字列
@@ -1675,8 +1704,26 @@ Private Function invertStringArray(ByRef srcArr() As String) As String()
     For cnt = 0 To cntMx
         retArr(cnt) = srcArr(idx)
         idx = idx - 1
+        Call callDoEvents '応答なし回避
     Next cnt
     
     invertStringArray = retArr
     
 End Function
+
+'
+'Excelの"応答なし"を回避するため、DoEventsをcallする
+'
+Private Function callDoEvents()
+    Dim newSec As Byte
+    
+    newSec = Second(Now)
+    
+    If (newSec <> oldSec) Then
+        DoEvents
+    End If
+    
+    oldSec = newSec
+    
+End Function
+
