@@ -1,2 +1,10 @@
 theme: jekyll-theme-leap-day
 show_downloads: true
+plugins:
+  - jekyll-seo-tag
+
+defaults:
+  -
+    values:
+      title: N進数の四則演算と基数変換
+      description: Microsoft Excel 用のユーザー定義関数群(ライブラリ)です
