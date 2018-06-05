@@ -268,7 +268,7 @@ baseNDivision("2147483648", "2147483647")
 17進数以上は扱えません。  
 対応しようとすれば、技術的に不可能ではないと思っていますが、
 32進法や64進法は、数字の書式に関するルールに、世間一般的に"ほとんどはこれ"というものがなく、
-また、代表的なルール同士は競合しがちです。(たとえば、10進法の 31 は Base32エンコード方式では 7 だけど、Base64エンコード方式では f )  
+また、代表的なルール同士は競合しがちです。(たとえば、10進法の 31 は Base32エンコード方式では 7 だけど、Base64エンコード方式では f [\(出典3\)](#source1))  
 その為この対応は面倒な上、混乱を招くと思っているので、今は保留しています。  
 
 # License
@@ -281,3 +281,4 @@ GPL v3.0 ライセンスです。
 {:#source1}
 1. [文字列型 (String) (Visual Basic)](https://docs.microsoft.com/ja-jp/dotnet/visual-basic/language-reference/data-types/string-data-type)  
 2. [Excel の仕様および制限](https://support.office.com/ja-jp/article/excel-%E3%81%AE%E4%BB%95%E6%A7%98%E3%81%8A%E3%82%88%E3%81%B3%E5%88%B6%E9%99%90-1672b34d-7043-467e-8e27-269d656771c3)  
+3. [The Base16, Base32, and Base64 Data Encodings](https://tools.ietf.org/html/rfc4648)
