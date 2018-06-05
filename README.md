@@ -1,4 +1,6 @@
-# Microsoft Excel 用VBAライブラリ(ユーザー定義関数群)です
+# 【VBA】N進数の四則演算・基数変換
+
+Microsoft Excel 用VBAライブラリ(ユーザー定義関数群)です
 
 ### 特徴
 
