@@ -1,0 +1,2 @@
+2018/06/02 10:27:09|sizeOfStringBuilder:       0
+2018/06/04 12:33:32|sizeOfStringBuilder:84188147
