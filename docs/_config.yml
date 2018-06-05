@@ -6,5 +6,5 @@ plugins:
 defaults:
   -
     values:
-      title: N進数の四則演算と基数変換
-      description: Microsoft Excel 用のユーザー定義関数群(ライブラリ)です
+      title: 【VBA】N進数の四則演算・基数変換
+      description: Microsoft Excel 用VBAライブラリ(ユーザー定義関数群)
