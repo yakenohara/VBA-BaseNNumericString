@@ -1,5 +1,6 @@
 ---
 layout: default
+MathJax: true
 ---
 
 [<- Back](./index.html)
