@@ -1,0 +1,301 @@
+<!doctype html>
+<html>
+  <head>
+    
+    
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <title>Base-N Numeric String by yakenohara</title>
+
+    <script
+      src="https://code.jquery.com/jquery-3.2.1.min.js"
+      integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
+      crossorigin="anonymous"></script>
+    
+    <link rel="stylesheet" href="assets/css/style.css?v=f884f01fb34543d6de0681c4b9fa482b484d50f0">
+    <script src="assets/js/wiki-features.js"></script>
+
+    
+
+    
+
+    <meta name="viewport" content="width=device-width">
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <!-- Begin Jekyll SEO tag v2.5.0 -->
+<title>Base-N Numeric String | 【VBA】N進数の四則演算・基数変換</title>
+<meta name="generator" content="Jekyll v3.7.3" />
+<meta property="og:title" content="Base-N Numeric String" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="【VBA】N進数の四則演算・基数変換" />
+<meta property="og:description" content="【VBA】N進数の四則演算・基数変換" />
+<link rel="canonical" href="http://localhost:4000/how-to-use.html" />
+<meta property="og:url" content="http://localhost:4000/how-to-use.html" />
+<meta property="og:site_name" content="Base-N Numeric String" />
+<script type="application/ld+json">
+{"description":"【VBA】N進数の四則演算・基数変換","@type":"WebPage","url":"http://localhost:4000/how-to-use.html","headline":"Base-N Numeric String","@context":"http://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+
+  </head>
+  <body>
+    <div id="titleBar">
+      <div id="titleLeft">
+        <a class="mainPagelink" href="/">
+          <h1>Base-N Numeric String</h1>
+        </a>
+        <p id="titleDescription">【VBA】N進数の四則演算・基数変換</p>
+      </div>
+      <div id="titleRight">
+        
+        <ul class="downloads">
+          <li><a href="http://github.com/yakenohara/VBA-BaseNNumericString/zipball/gh-pages"><div class="normal">Download</div><strong>ZIP File</strong></a></li>
+          <li><a href="http://github.com/yakenohara/VBA-BaseNNumericString/tarball/gh-pages"><div class="normal">Download</div><strong>TAR Ball</strong></a></li>
+          <li><a href="http://github.com/yakenohara/VBA-BaseNNumericString"><div class="normal">View On</div><strong>GitHub</strong></a></li>
+        </ul>
+        
+      </div>
+    </div>
+
+    <div class="wrapper" id="mainContents">
+      <header>
+        
+
+        
+
+        
+
+        <div class="tocTitle">Table of Contents</div>
+        <div id="toc"></div>
+        
+      </header>
+      <div class="mainTitle">
+        <h1>Base-N Numeric String</h1>
+        <p>【VBA】N進数の四則演算・基数変換</p>
+      </div>
+      <section>
+        <div id="content">
+          <p><a href="./index.html">&lt;- Back</a></p>
+
+<h1 id="使いましょう">使いましょう</h1>
+
+<p>このページでは、「BaseNNumericString」を使用した具体例を、使い方を含めて説明しています。<br />
+以下の内容を一通り実践すれば、「BaseNNumericString」を活用できるようになります。</p>
+
+<h2 id="9999999999999999--1--9999999999999990-">9,999,999,999,999,999 + 1 = 9,999,999,999,999,990 !?</h2>
+
+<p>例として以下の演算を行ってみましょう。</p>
+
+<blockquote>
+  <p>9,999,999,999,999,999 + 1</p>
+</blockquote>
+
+<p>非常に大きな数に対する足し算ですが、ひっ算で求める分には簡単な計算です。<br />
++1 なので、すべての桁が繰り上がって答えは、「10,000,000,000,000,000(10京)」です。</p>
+
+<p>ですがExcelの演算(+)では、以下のようになります。</p>
+
+<p><img src="/assets/images/normalPlus1.png" alt="normalPlus1" /></p>
+
+<p>↓この状態で、Enterを押す</p>
+
+<p><img src="/assets/images/normalPlus2.png" alt="normalPlus2" /></p>
+
+<p>足される数に、「9,999,999,999,999,999」を指定したのに、<br />
+「9,999,999,999,999,990」と変更された上、<br />
+答えが「9,999,999,999,999,990」になってしまいました。<br />
+( +1 さえ、正しく演算してくれません)</p>
+
+<p>「BaseNNumericString」でこの演算を行うには、以下のようにします。</p>
+
+<p>演算結果を表示させたいセルで、「=baseN」と入力してください。<br />
+(※まだEnterは押さないでください)</p>
+
+<p>すると、baseNから始まる関数の候補が以下画像のようにリストアップされます。</p>
+
+<p><img src="/assets/images/functions.png" alt="functions" /></p>
+
+<p>このリストから、「baseNAddition」を選択します。<br />
+※キーボードの上下キーで「baseNAddition」にカーソルをあわせたら、「Tab」キーで選択します。</p>
+
+<p>次に、()内に、足される数と足す数を以下画像のように指定します。</p>
+
+<p><img src="/assets/images/functions2.png" alt="functions2" /></p>
+
+<p>ここで注意してほしいのは、<br />
+指定している数値を”“で括っていることです。<br />
+これは、「9,999,999,999,999,999」という数値を指定するという事ではなく、<br />
+「9999999999999999」という文字列を指定するという事を意味しています。<br />
+(キーボードを叩いている私達からすれば、どちらも同じ事ですが、コンピュータにとって両者は大きな違いがあるのです)</p>
+
+<p>このような指定の仕方を一般的に「String型で指定する」もしくは、「文字列型で指定する」といいます。</p>
+
+<p>「BaseNNumericString」のAPI仕様では、String型で指定する必要がある引数については、<br />
+パラメータの説明に「変数名 - 説明(String型)」と記載しています。<br />
+使用する関数の引数がString型である必要がるのかどうかを判断するには、<br />
+API仕様を参照すれば判断できます。</p>
+
+<p>最後に、Enterを押します。</p>
+
+<p><img src="/assets/images/functions3.png" alt="functions3" /></p>
+
+<p>正しい答えである、<br />
+「10,000,000,000,000,000(10京)」を得る事ができました。</p>
+
+<p>上記の説明では、関数の引数に直接、”“で括った数値を指定しましたが、<br />
+Excel標準の関数同様、セルのアドレスを指定する事も可能です。<br />
+(しかし、足される数として入力したい他のセルに、<br />
+「9,999,999,999,999,999」を入力しても、そのセルの値は「9,999,999,999,999,990」に変更されてしまいます。<br />
+これはExcelの仕様ですので、セルの書式を「文字列」に変更して、「9999999999999999」と入力してください。)</p>
+
+<h2 id="2進数の-1000000000---01">2進数の 1,000,000,000 - 0.1</h2>
+
+<p>次の例として、以下の演算を行ってみましょう</p>
+
+<blockquote>
+  <p>2進数における、<br />
+1,000,000,000 - 0.1</p>
+</blockquote>
+
+<p>今回も引かれる数は10億というなかなか大きな数ですが、ひっ算で求める分には簡単な計算です。<br />
+-0.1 なので、すべての桁が繰り下がって答えは「111,111,111.1」です。</p>
+
+<p>ですがこの演算は、Excel標準機能では簡単には解決できません。</p>
+
+<p>なぜなら、<br />
+「2進数の四則演算をするときは、2進数→10進数に変換してから演算する必要がある。<br />
+しかし、取り扱える2進数は 自然数で、なおかつ、0～111,111,111(10進数でいう、0～511) まで」<br />
+という制約があるからです。</p>
+
+<p>「BaseNNumericString」なら、以下のように指定すれば簡単です。</p>
+
+<p><img src="/assets/images/functions4.png" alt="functions4" /></p>
+
+<p>使用する関数は、1つ目の例で使用した、「baseNAddition」である事は変わりません。<br />
+四則演算における減算は、マイナス値による和算に等しいからです。</p>
+
+<p>そのため、第2引数には、”-0.1”というマイナス値を指定します。<br />
+さらに、1つ目の例では使用しなかった、第3引数を指定します。<br />
+この例では2進数による演算をしたいので、2 を指定しています。</p>
+
+<p>最後に、Enterを押します。</p>
+
+<p><img src="/assets/images/functions5.png" alt="functions5" /></p>
+
+<p>正しい答えである、<br />
+「111,111,111.1」を得る事ができました。<br />
+この例では、10進数の演算のときには省略していた第3引数に、「基数を2とする」という意味で、 2 を指定しました。</p>
+
+<p>このように、場合によって省略可能な引数が、「BaseNNumericString」には存在します。</p>
+
+<p>「BaseNNumericString」のAPI仕様では、省略可能な引数については、<br />
+パラメータの説明に「変数名 - 説明(Optional)」と記載しています。<br />
+使用する関数の引数が省略可能かどうかを判断するには、API仕様を参照すれば判断できます。</p>
+
+<h2 id="10進数の-01-を-2進数に変換">10進数の 0.1 を 2進数に変換</h2>
+
+<p>最後の例として、基数変換を行ってみましょう</p>
+
+<blockquote>
+  <p>10進数の、<br />
+0.1<br />
+を、<br />
+2進数に変換</p>
+</blockquote>
+
+<p>Excelの標準機能が取り扱える2進数は、<br />
+「自然数で、なおかつ、0～111,111,111(10進数でいう、0～511) まで」ですから、<br />
+この問題もまた、Excel標準機能で解決するには難題です。</p>
+
+<p>「BaseNNumericString」なら、以下のように指定すれば簡単です。</p>
+
+<p><img src="/assets/images/functions6.png" alt="functions6" /></p>
+
+<p>使用する関数を「baseNConv」にして、<br />
+第1引数に変換対象の数値、<br />
+第2引数に変換前の基数<br />
+第3引数に変換後の基数を指定します。<br />
+Enterを押すと、以下画像のようになります。</p>
+
+<p><img src="/assets/images/functions7.png" alt="functions7" /></p>
+
+<p>真の解は、数学的に表すと、以下のように導かれます。</p>
+
+<p>10進数の10は、2進数で1010だから、<br />
+10進数の<script type="math/tex">0.1\left(=\frac{1}{10}\right)</script>は、2進数では、</p>
+
+<script type="math/tex; mode=display">% <![CDATA[
+\begin{align}
+&\frac{1}{1010}&\\
+&&\hookleftarrow\times1.1\\
+=&\frac{1.1}{1111}&\\
+\end{align} %]]></script>
+
+<p>解をAとすると、</p>
+
+<script type="math/tex; mode=display">% <![CDATA[
+\begin{align}
+\frac{1.1}{1111}&=A\\
+1.1&=1111A\\
+1.1&=10000A-A
+\end{align} %]]></script>
+
+<p>これは、<script type="math/tex">A=0.0\dot{0}01\dot{1}</script> のときに成り立つ。<br />
+その為、10進数の 0.1 は、2進数では<script type="math/tex">0.0\dot{0}01\dot{1}</script></p>
+
+<p>ですので「baseNConv」関数は、上の画像のように表示されている桁数まで(数えると、30桁まで表示されています)なら、正しい解が得られた事になります。<br />
+30桁以上の精度が必要な場合は、以下のように指定します。</p>
+
+<p><img src="/assets/images/functions8.png" alt="functions8" /></p>
+
+<p>第1～第3引数までは今までのままにして、第4引数に 60 を指定しました。<br />
+Enterを押すと、以下のようになります。</p>
+
+<p><img src="/assets/images/functions9.png" alt="functions9" /></p>
+
+<p>2つ目の例同様、この関数にも省略可能な引数が存在し、<br />
+「baseNConv」においてそれは、求める小数点以下の桁数となります。<br />
+詳細な仕様はAPI仕様に記載しています。</p>
+
+<p>以上が、「BaseNNumericString」の基本的な使い方です。<br />
+提供する関数は「baseNAddition」「baseNConv」だけではありません。<br />
+各関数の仕様は、API仕様を参照して下さい。</p>
+
+<p><a href="./index.html">&lt;- Back</a></p>
+
+        </div>
+          
+        
+
+      </section>
+      <footer>
+        
+
+        
+        <p>This project is maintained by <a href="http://github.com/yakenohara">yakenohara</a></p>
+        
+        
+      </footer>
+    </div>
+    <script src="assets/js/scale.fix.js"></script>
+
+    
+    
+    <script type="text/javascript">
+        $(document).ready(function() {
+            $('#toc').toc({
+              noBackToTopLinks: true,
+              title: '',
+              minimumHeaders: 1,
+              headers: 'section h1, section h2, section h3, section h4, section h5, section h6',
+              listType: 'ul',
+              showEffect: 'none',
+              classes: {list: 'tocList',
+                        item: 'tocItem'}
+            });
+        });
+    </script>
+
+    <script src="assets/js/script.js"></script>
+  </body>
+</html>

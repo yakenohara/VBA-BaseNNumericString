@@ -22,11 +22,11 @@ layout: default
 
 ですがExcelの演算(+)では、以下のようになります。
 
-![normalPlus1]({{site.baseurl}}/images/normalPlus1.png)
+![normalPlus1](assets/images/normalPlus1.png)
 
 ↓この状態で、Enterを押す
 
-![normalPlus2]({{site.baseurl}}/images/normalPlus2.png)
+![normalPlus2](assets/images/normalPlus2.png)
 
 足される数に、「9,999,999,999,999,999」を指定したのに、  
 「9,999,999,999,999,990」と変更された上、  
@@ -40,14 +40,14 @@ layout: default
 
 すると、baseNから始まる関数の候補が以下画像のようにリストアップされます。
 
-![functions]({{site.baseurl}}/images/functions.png)
+![functions](assets/images/functions.png)
 
 このリストから、「baseNAddition」を選択します。  
 ※キーボードの上下キーで「baseNAddition」にカーソルをあわせたら、「Tab」キーで選択します。  
 
 次に、()内に、足される数と足す数を以下画像のように指定します。
 
-![functions2]({{site.baseurl}}/images/functions2.png)
+![functions2](assets/images/functions2.png)
 
 ここで注意してほしいのは、  
 指定している数値を""で括っていることです。  
@@ -64,7 +64,7 @@ API仕様を参照すれば判断できます。
 
 最後に、Enterを押します。
 
-![functions3]({{site.baseurl}}/images/functions3.png)
+![functions3](assets/images/functions3.png)
 
 正しい答えである、  
 「10,000,000,000,000,000(10京)」を得る事ができました。  
@@ -95,7 +95,7 @@ Excel標準の関数同様、セルのアドレスを指定する事も可能で
 
 「BaseNNumericString」なら、以下のように指定すれば簡単です。
 
-![functions4]({{site.baseurl}}/images/functions4.png)
+![functions4](assets/images/functions4.png)
 
 使用する関数は、1つ目の例で使用した、「baseNAddition」である事は変わりません。  
 四則演算における減算は、マイナス値による和算に等しいからです。  
@@ -106,7 +106,7 @@ Excel標準の関数同様、セルのアドレスを指定する事も可能で
 
 最後に、Enterを押します。
 
-![functions5]({{site.baseurl}}/images/functions5.png)
+![functions5](assets/images/functions5.png)
 
 正しい答えである、  
 「111,111,111.1」を得る事ができました。  
@@ -134,7 +134,7 @@ Excelの標準機能が取り扱える2進数は、
 
 「BaseNNumericString」なら、以下のように指定すれば簡単です。
 
-![functions6]({{site.baseurl}}/images/functions6.png)
+![functions6](assets/images/functions6.png)
 
 使用する関数を「baseNConv」にして、  
 第1引数に変換対象の数値、  
@@ -142,7 +142,7 @@ Excelの標準機能が取り扱える2進数は、
 第3引数に変換後の基数を指定します。  
 Enterを押すと、以下画像のようになります。
 
-![functions7]({{site.baseurl}}/images/functions7.png)
+![functions7](assets/images/functions7.png)
 
 真の解は、数学的に表すと、以下のように導かれます。
 
@@ -174,12 +174,12 @@ $$
 ですので「baseNConv」関数は、上の画像のように表示されている桁数まで(数えると、30桁まで表示されています)なら、正しい解が得られた事になります。  
 30桁以上の精度が必要な場合は、以下のように指定します。
 
-![functions8]({{site.baseurl}}/images/functions8.png)
+![functions8](assets/images/functions8.png)
 
 第1～第3引数までは今までのままにして、第4引数に 60 を指定しました。  
 Enterを押すと、以下のようになります。
 
-![functions9]({{site.baseurl}}/images/functions9.png)
+![functions9](assets/images/functions9.png)
 
 2つ目の例同様、この関数にも省略可能な引数が存在し、  
 「baseNConv」においてそれは、求める小数点以下の桁数となります。  

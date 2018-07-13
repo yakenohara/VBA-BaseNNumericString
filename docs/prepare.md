@@ -43,11 +43,11 @@ Excelを開いたら、
   
 開いたVBEの、左側のツリーが表示されている部分(「プロジェクト エクスプローラー」といいます)に対して、以下画像のように、「BaseNNumericString.bas」を D&D します。
 
-![ins1]({{site.baseurl}}/images/ins1.png)
+![ins1](assets/images/ins1.png)
 
 すると、以下画像のように、プロジェクト エクスプローラー内に「BaseNNumericString」が追加されます。
 
-![ins1]({{site.baseurl}}/images/ins2.png)
+![ins1](assets/images/ins2.png)
 
 VBEに対する操作は以上です。VBEを閉じます。  
   

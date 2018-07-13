@@ -1,0 +1,390 @@
+<!doctype html>
+<html>
+  <head>
+    
+    
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <title>Base-N Numeric String by yakenohara</title>
+
+    <script
+      src="https://code.jquery.com/jquery-3.2.1.min.js"
+      integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
+      crossorigin="anonymous"></script>
+    
+    <link rel="stylesheet" href="assets/css/style.css?v=f884f01fb34543d6de0681c4b9fa482b484d50f0">
+    <script src="assets/js/wiki-features.js"></script>
+
+    
+
+    
+
+    <meta name="viewport" content="width=device-width">
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <!-- Begin Jekyll SEO tag v2.5.0 -->
+<title>Base-N Numeric String | 【VBA】N進数の四則演算・基数変換</title>
+<meta name="generator" content="Jekyll v3.7.3" />
+<meta property="og:title" content="Base-N Numeric String" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="【VBA】N進数の四則演算・基数変換" />
+<meta property="og:description" content="【VBA】N進数の四則演算・基数変換" />
+<link rel="canonical" href="http://localhost:4000/" />
+<meta property="og:url" content="http://localhost:4000/" />
+<meta property="og:site_name" content="Base-N Numeric String" />
+<script type="application/ld+json">
+{"name":"Base-N Numeric String","description":"【VBA】N進数の四則演算・基数変換","@type":"WebSite","url":"http://localhost:4000/","headline":"Base-N Numeric String","@context":"http://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+
+  </head>
+  <body>
+    <div id="titleBar">
+      <div id="titleLeft">
+        <a class="mainPagelink" href="/">
+          <h1>Base-N Numeric String</h1>
+        </a>
+        <p id="titleDescription">【VBA】N進数の四則演算・基数変換</p>
+      </div>
+      <div id="titleRight">
+        
+        <ul class="downloads">
+          <li><a href="http://github.com/yakenohara/VBA-BaseNNumericString/zipball/gh-pages"><div class="normal">Download</div><strong>ZIP File</strong></a></li>
+          <li><a href="http://github.com/yakenohara/VBA-BaseNNumericString/tarball/gh-pages"><div class="normal">Download</div><strong>TAR Ball</strong></a></li>
+          <li><a href="http://github.com/yakenohara/VBA-BaseNNumericString"><div class="normal">View On</div><strong>GitHub</strong></a></li>
+        </ul>
+        
+      </div>
+    </div>
+
+    <div class="wrapper" id="mainContents">
+      <header>
+        
+
+        
+
+        
+
+        <div class="tocTitle">Table of Contents</div>
+        <div id="toc"></div>
+        
+      </header>
+      <div class="mainTitle">
+        <h1>Base-N Numeric String</h1>
+        <p>【VBA】N進数の四則演算・基数変換</p>
+      </div>
+      <section>
+        <div id="content">
+          <p>Microsoft Excel 用VBAライブラリ(ユーザー定義関数群)です</p>
+
+<h1 id="特徴">特徴</h1>
+
+<ul>
+  <li>N進数同士の四則演算(和算・減算・乗算・除算)を、N進数のまま演算します</li>
+  <li>内部的に浮動小数点数にキャストせずに演算します</li>
+  <li>N進数→N進数変換を、小数点を含んだ状態で実行できます</li>
+</ul>
+
+<h1 id="こんな時に使います">こんな時に使います</h1>
+
+<p><em>N進数(10進数を含む)に対する演算を、ExcelをインストールしているPCであれば、どのPCでも動くワークブックを作りたい</em></p>
+
+<p>このような問題は、簡単な数値(例えばF(hex)→1111(bin)のような変換等)であれば、Excel標準機能で計算可能です。<br />
+しかしながら、以下のような問題は、「BaseNNumericString」が解決します。</p>
+
+<ul>
+  <li>Excel標準の演算機能(+, -, *, /)では精度が確保できない演算</li>
+  <li>小数点を含んだN進数同士の四則演算</li>
+  <li>Excel標準の基数変換関数(BIN2HEX, HEX2BIN等)では扱いきれない大きな数値の基数変換</li>
+  <li>小数を含んだN進数の基数変換</li>
+</ul>
+
+<h1 id="動作環境">動作環境</h1>
+
+<ul>
+  <li>Windows 7(64bit, 32bit) 以上</li>
+  <li>Microsoft Excel 2013(64bit, 32bit) 以上<br />
+↑動作確認できた環境が上記であるというだけです。実際は動くかもしれません</li>
+</ul>
+
+<h1 id="使い方">使い方</h1>
+
+<p>Excelアプリの設定でマクロを有効にして下さい。<br />
+<a href="./prepare.html">Excelマクロの有効化設定手順はこちら</a></p>
+
+<p>あとは、Excelの標準関数と同様に使用できます。<br />
+具体的に役立つ場面を、<a href="./how-to-use.html">このページでチュートリアル形式で説明</a>しています。</p>
+
+<h1 id="api仕様">API仕様</h1>
+
+<p>パラメータの説明は、上から順番に、第1,2,3…引数という順番で記載しています。</p>
+<h2 id="basenaddition">baseNAddition</h2>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>加算
+
+パラメータ:
+  val1  - 足される数(String型)
+  val2  - 足す数(String型)
+  radix - 基数(Optional) 省略した場合は、10とみなします
+
+
+戻り値:
+  加算結果
+  パラメータが不正の場合は、以下に応じたCvErrを返却します
+    ・val1 / val2 が空文字かNullの場合(エラーコードは#NULL!)
+    ・radixが2~16以外か、val1 / val2 はn進値として不正の場合(エラーコードは#NUM!)
+</code></pre></div></div>
+
+<h2 id="basenmultiplication">baseNMultiplication</h2>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>乗算
+
+パラメータ:
+  multiplicand - 被乗数(String型)
+  multiplier   - 乗数(String型)
+  radix        - 基数(Optional) 省略した場合は、10とみなします
+
+戻り値:
+  乗算結果
+  パラメータが不正の場合は、以下に応じたCvErrを返却します
+    ・multiplicand / multiplier が空文字かNullの場合(エラーコードは#NULL!)
+    ・radixが2~16以外か、multiplicand / multiplier はn進値として不正の場合(エラーコードは#NUM!)
+</code></pre></div></div>
+
+<h2 id="basendivision">baseNDivision</h2>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>除算の商
+
+パラメータ:
+  dividend         - 被除数(String型)
+  divisor          - 除数(String型)
+  radix            - 基数(Optional) 省略した場合は、10とみなします
+  limitOfFrcDigits - 求める小数点以下桁数の最大値(Optional) 省略した場合は、30とみなします
+                     0を設定した場合は、小数点以下は求めません
+                     (-)値を設定した場合は、その値を(-1)倍した整数桁数を残した状態で、除算を打ち切ります
+                       ex:)
+                      【前提】512 / 3 = 100 余り 212
+                      【実行方法】x = baseNDivision("512", "3", 10, -2)
+                      【結果】 x:100
+
+戻り値:
+  除算の商
+  以下の場合は、エラーコードを返却します
+    ・0割の場合(エラーコードは#DIV/0!)
+    ・dividend / divisor の数値列内に、Long型で取り扱えない大きな数値がある場合(エラーコードは#NUM!)
+    ・dividend / divisor が空文字かNullの場合(エラーコードは#NULL!)
+    ・radixが2~16以外か、数値列はn進値として不正の場合(エラーコードは#NUM!)
+</code></pre></div></div>
+
+<h2 id="basendivisionrem">baseNDivisionRem</h2>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>除算の余り
+
+パラメータ:
+  dividend         - 被除数(String型)
+  divisor          - 除数(String型)
+  radix            - 基数(Optional) 省略した場合は、10とみなします
+  limitOfFrcDigits - 求める小数点以下桁数の最大値(Optional) 省略した場合は、30とみなします
+                     0を設定した場合は、小数点以下は求めません
+                     (-)値を設定した場合は、その値を(-1)倍した整数桁数を残した状態で、除算を打ち切ります
+                       ex:)
+                      【前提】512 / 3 = 100 余り 212
+                      【実行方法】x = baseNDivisionRem("512", "3", 10, -2)
+                      【結果】 x:212
+
+戻り値:
+  除算の余り
+  以下の場合は、エラーコードを返却します
+    ・0割の場合(エラーコードは#DIV/0!)
+    ・dividend / divisor の数値列内に、Long型で取り扱えない大きな数値がある場合(エラーコードは#NUM!)
+    ・dividend / divisor が空文字かNullの場合(エラーコードは#NULL!)
+    ・radixが2~16以外か、数値列はn進値として不正の場合(エラーコードは#NUM!)
+</code></pre></div></div>
+
+<h2 id="quotandremdofbasendivision">quotAndRemdOfBaseNDivision</h2>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>除算の商と余り
+
+この関数は、除算結果の余りを参照渡しされた変数remainderに格納して、
+除算結果の商を返却することで、商と余りと一度に取得することを目的に使用します。
+
+そのためユーザー定義関数としてワークシートから数式で呼び出しても、
+呼び出した側のワークシートは変数remainderに格納された数値を確認できません。
+
+VBによる開発時に初めて使用するものと理解して下さい。
+
+パラメータ:
+  dividend         - 被除数(String型)
+  divisor          - 除数(String型)
+  radix            - 基数(Optional) 省略した場合は、10とみなします
+  remainder        - 余り(参照渡し)
+  limitOfFrcDigits - 求める小数点以下桁数の最大値(Optional) 省略した場合は、30とみなします
+                     0を設定した場合は、小数点以下は求めません
+                     (-)値を設定した場合は、その値を(-1)倍した整数桁数を残した状態で、除算を打ち切ります
+                       ex:)
+                     【前提】512 / 3 = 100 余り 212
+                     【実行方法】x = quotAndRemdOfBaseNDivision("512", "3", 10, r, -2)
+                     【結果】 x:100
+                              r:212
+
+戻り値:
+  パラメータのremainderに除算の余りを格納し、除算の商を返却します
+  以下の場合は、エラーコードを返却します
+    ・0割の場合(エラーコードは#DIV/0!)
+    ・dividend / divisor の数値列内に、Long型で取り扱えない大きな数値がある場合(エラーコードは#NUM!)
+    ・dividend / divisor が空文字かNullの場合(エラーコードは#NULL!)
+    ・radixが2~16以外か、数値列はn進値として不正の場合(エラーコードは#NUM!)
+</code></pre></div></div>
+
+<h2 id="basenconv">baseNConv</h2>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>n進数をn進数に変換する
+
+パラメータ:
+  baseNNumericStr  - 変換元数値(String型)
+  fromRadix        - 変換元数値の基数
+  toRadix          - 変換先数値の基数
+  limitOfFrcDigits - 小数点以下の求める桁数(Optional)
+
+戻り値:
+  パラメータが不正の場合は、以下に応じたCvErrを返却します
+    ・fromRadix / toRadix が2~16以外か、baseNNumericStrはfromRadix進値として不正の場合(エラーコードは#NUM!)
+    ・baseNNumericStrが空文字かNullの場合(エラーコードは#NULL!)
+    ・limitOfFrcDigitsが(-)値 (エラーコードは#NUM!)
+</code></pre></div></div>
+
+<h2 id="basenminus1scomplement">baseNMinus1sComplement</h2>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>減基数の補数を得る
+
+
+パラメータ:
+  baseNNumericStr  - 変換元数値(String型)
+  radix            - 基数
+
+戻り値:
+  減基数の補数
+  パラメータが不正の場合は、以下に応じたCvErrを返却します
+    ・radixが2~16以外か、数値列はn進値として不正の場合(エラーコードは#NUM!)
+    ・数値列が空文字かNullの場合(エラーコードは#NULL!)
+</code></pre></div></div>
+
+<h1 id="制限事項">制限事項</h1>
+
+<p>用途によっては致命的なもの</p>
+
+<ul>
+  <li>遅いです。大量計算には向きません <a href="#comt1">※1</a></li>
+  <li>セルに表示出来る計算結果は、符号と小数点文字含めて、32,767 文字までです <a href="#comt2">※2</a></li>
+  <li>除算でオーバーフローする場合があります <a href="#comt3">※3</a></li>
+  <li>扱える基数は2～16まで <a href="#comt4">※4</a></li>
+</ul>
+
+<p>書式に関するもの</p>
+
+<ul>
+  <li>10進法でいう 10以上の数字は、10→A,11→B…,15→Fと、大文字アルファベットで記述します。小文字は使用できません。</li>
+  <li>小数点は “.” です</li>
+  <li>桁区切り文字 “,”等 は使用できません</li>
+  <li>プラス記号 “+” は使用できません</li>
+  <li>指数表現の数値指定はできません</li>
+</ul>
+
+<p id="comt1">※1<br />
+Windows10 64bit, MS-Office 2016 64bit(CPU:Corei7-3770, RAM:16GB)の環境で、<br />
+除算は約 110[桁/s]、基数変換(小数の変換)においては約900[桁/s]程度の速度でした。</p>
+
+<p>関数電卓代わりに使用する分には十分な計算速度ですが、<br />
+計算速度を意識するプログラム開発には向きません。</p>
+
+<p id="comt2">※2<br />
+計算結果をセルに表示させる場合に、この制限がかかってしまいます。<br />
+これはExcelの仕様に、「セルが含むことができる合計文字数は32,767 文字まで<a href="#source1">(出典1)</a>」とある為です。<br />
+32,767文字を超える演算結果となった場合は、セルに「#VALUE!」と表示されます。<br />
+書式が正しいのに「#VALUE!」となってしまった場合は、この制限に該当していないかどうかを確認してください。</p>
+
+<p>計算結果をセルに表示させない(具体的には、外部モジュールからの関数呼び出しの場合)は、この限りではありませんが、<br />
+返却値型をString型としているので、VBのString型の格納文字数制限( ‘およそ’ 20億とMicrosoftはいっています<a href="#source1">(出典2)</a>)までしか取り扱えません。</p>
+
+<p id="comt3">※3<br />
+以下3つのAPI(除算をする関数)にその可能性があります。</p>
+<ul>
+  <li>baseNDivision</li>
+  <li>baseNDivisionRem</li>
+  <li>quotAndRemdOfBaseNDivision</li>
+</ul>
+
+<p>理由は、除算処理内部で、除数と被除数をVBのLong型にキャストした状態で除算を行っているからです。</p>
+
+<p>除数の場合は、10進数換算で、「-2,147,483,647～2,147,483,647」までセーフ、<br />
+被除数の場合は、ひっ算による除算中に「2,147,483,647」に収まらない数値が発生しない間はセーフとなります。</p>
+
+<p>具体例でいうと、以下はセーフですが、</p>
+
+<pre><code class="language-vb.net">baseNDivision("2147483648", "2")
+</code></pre>
+
+<p>以下はアウトとなります(オーバーフローが発生します)。</p>
+
+<pre><code class="language-vb.net">baseNDivision("2147483648", "2147483647")
+</code></pre>
+
+<p>オーバーフローが発生した場合は、戻り値として「#NUM!」を返します。<br />
+書式が正しいのに「#NUM!」となってしまった場合は、この例に当てはまっていないかどうかを確認してください。</p>
+
+<p id="comt4">※4<br />
+17進数以上は扱えません。<br />
+対応しようとすれば、技術的に不可能ではないと思っていますが、
+32進法や64進法は、数字の書式に関するルールに、世間一般的に”ほとんどはこれ”というものがなく、
+また、代表的なルール同士は競合しがちです。(たとえば、10進法の 31 は Base32エンコード方式では 7 だけど、Base64エンコード方式では f <a href="#source1">(出典3)</a>)<br />
+その為この対応は面倒な上、混乱を招くと思っているので、今は保留しています。</p>
+
+<h1 id="license">License</h1>
+
+<p>GPL v3.0 ライセンスです。<br />
+詳しい内容は、PJのライセンスファイルを確認して下さい。</p>
+
+<h1 id="出典">出典</h1>
+
+<ol id="source1">
+  <li><a href="https://docs.microsoft.com/ja-jp/dotnet/visual-basic/language-reference/data-types/string-data-type">文字列型 (String) (Visual Basic)</a></li>
+  <li><a href="https://support.office.com/ja-jp/article/excel-%E3%81%AE%E4%BB%95%E6%A7%98%E3%81%8A%E3%82%88%E3%81%B3%E5%88%B6%E9%99%90-1672b34d-7043-467e-8e27-269d656771c3">Excel の仕様および制限</a></li>
+  <li><a href="https://tools.ietf.org/html/rfc4648">The Base16, Base32, and Base64 Data Encodings</a></li>
+</ol>
+
+        </div>
+          
+        
+
+      </section>
+      <footer>
+        
+
+        
+        <p>This project is maintained by <a href="http://github.com/yakenohara">yakenohara</a></p>
+        
+        
+      </footer>
+    </div>
+    <script src="assets/js/scale.fix.js"></script>
+
+    
+    
+    <script type="text/javascript">
+        $(document).ready(function() {
+            $('#toc').toc({
+              noBackToTopLinks: true,
+              title: '',
+              minimumHeaders: 1,
+              headers: 'section h1, section h2, section h3, section h4, section h5, section h6',
+              listType: 'ul',
+              showEffect: 'none',
+              classes: {list: 'tocList',
+                        item: 'tocItem'}
+            });
+        });
+    </script>
+
+    <script src="assets/js/script.js"></script>
+  </body>
+</html>

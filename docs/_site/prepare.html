@@ -1,0 +1,176 @@
+<!doctype html>
+<html>
+  <head>
+    
+    
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <title>Base-N Numeric String by yakenohara</title>
+
+    <script
+      src="https://code.jquery.com/jquery-3.2.1.min.js"
+      integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
+      crossorigin="anonymous"></script>
+    
+    <link rel="stylesheet" href="assets/css/style.css?v=f884f01fb34543d6de0681c4b9fa482b484d50f0">
+    <script src="assets/js/wiki-features.js"></script>
+
+    
+
+    
+
+    <meta name="viewport" content="width=device-width">
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <!-- Begin Jekyll SEO tag v2.5.0 -->
+<title>Base-N Numeric String | 【VBA】N進数の四則演算・基数変換</title>
+<meta name="generator" content="Jekyll v3.7.3" />
+<meta property="og:title" content="Base-N Numeric String" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="【VBA】N進数の四則演算・基数変換" />
+<meta property="og:description" content="【VBA】N進数の四則演算・基数変換" />
+<link rel="canonical" href="http://localhost:4000/prepare.html" />
+<meta property="og:url" content="http://localhost:4000/prepare.html" />
+<meta property="og:site_name" content="Base-N Numeric String" />
+<script type="application/ld+json">
+{"description":"【VBA】N進数の四則演算・基数変換","@type":"WebPage","url":"http://localhost:4000/prepare.html","headline":"Base-N Numeric String","@context":"http://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+
+  </head>
+  <body>
+    <div id="titleBar">
+      <div id="titleLeft">
+        <a class="mainPagelink" href="/">
+          <h1>Base-N Numeric String</h1>
+        </a>
+        <p id="titleDescription">【VBA】N進数の四則演算・基数変換</p>
+      </div>
+      <div id="titleRight">
+        
+        <ul class="downloads">
+          <li><a href="http://github.com/yakenohara/VBA-BaseNNumericString/zipball/gh-pages"><div class="normal">Download</div><strong>ZIP File</strong></a></li>
+          <li><a href="http://github.com/yakenohara/VBA-BaseNNumericString/tarball/gh-pages"><div class="normal">Download</div><strong>TAR Ball</strong></a></li>
+          <li><a href="http://github.com/yakenohara/VBA-BaseNNumericString"><div class="normal">View On</div><strong>GitHub</strong></a></li>
+        </ul>
+        
+      </div>
+    </div>
+
+    <div class="wrapper" id="mainContents">
+      <header>
+        
+
+        
+
+        
+
+        <div class="tocTitle">Table of Contents</div>
+        <div id="toc"></div>
+        
+      </header>
+      <div class="mainTitle">
+        <h1>Base-N Numeric String</h1>
+        <p>【VBA】N進数の四則演算・基数変換</p>
+      </div>
+      <section>
+        <div id="content">
+          <p><a href="./index.html">&lt;- Back</a></p>
+
+<h1 id="導入使う前の準備">導入(使う前の準備)</h1>
+
+<h2 id="マクロの有効化">マクロの有効化</h2>
+
+<p>Excelの設定を変更します。<br />
+(この手順は、環境によってはすでに済んでいるかもしれません)</p>
+
+<p>Excelを開いたら、<br />
+「ファイル」→「オプション」→「セキュリティ センター」→<br />
+「セキュリティ センターの設定(T)…」→「マクロの設定」→<br />
+「マクロの設定」で、</p>
+
+<p>「警告を表示せずにすべてのマクロを無効にする(L)」以外を選びます<br />
+各選択肢は、以下の意味を持ちます</p>
+
+<blockquote>
+  <p>「警告を表示してすべてのマクロを有効にする(D)」</p>
+</blockquote>
+
+<p>-&gt;マクロが入ったブックを開くたびに、「マクロが無効にされました。」が表示され、<br />
+「コンテンツの有効化」ボタンでマクロを有効にできます。</p>
+
+<blockquote>
+  <p>「デジタル署名されたマクロを除き、すべてのマクロを無効にする(G)」</p>
+</blockquote>
+
+<p>-&gt;「BaseNNumericString」を使う限りでは、「警告を表示してすべてのマクロを有効にする(D)」を選択する事と変わりありません。</p>
+
+<blockquote>
+  <p>「すべてのマクロを有効にする(E)」</p>
+</blockquote>
+
+<p>-&gt;マクロは警告なく実行されます。</p>
+
+<p>以上で、マクロの有効化は完了です。<br />
+この手順は、動作させるPCで1度だけ設定すればOKです。</p>
+
+<h2 id="basennumericstringbasをブックにインストール">「BaseNNumericString.bas」をブックにインストール</h2>
+
+<p>作成しているブックを開いた状態で、「Alt + F11」を押します。<br />
+(この操作の事を「VBE(Visual Basic Editor)を開く」といいます)</p>
+
+<p>開いたVBEの、左側のツリーが表示されている部分(「プロジェクト エクスプローラー」といいます)に対して、以下画像のように、「BaseNNumericString.bas」を D&amp;D します。</p>
+
+<p><img src="/assets/images/ins1.png" alt="ins1" /></p>
+
+<p>すると、以下画像のように、プロジェクト エクスプローラー内に「BaseNNumericString」が追加されます。</p>
+
+<p><img src="/assets/images/ins2.png" alt="ins1" /></p>
+
+<p>VBEに対する操作は以上です。VBEを閉じます。</p>
+
+<p>最後に、「マクロをインストールしたブック」として保存します。<br />
+「名前をつけて保存」ダイアログの、「ファイルの種類(T)」で、「Excel マクロ有効ブック(*.xlsm)」を選択して保存してください。<br />
+(当然、ファイル名は好きな名前でOKです)</p>
+
+<p>以上で、ブックに対するインストールが終わりました。<br />
+この手順は、「BaseNNumericString」を機能させたいブックを作成する度に必要となります。</p>
+
+<p><a href="./index.html">&lt;- Back</a></p>
+
+        </div>
+          
+        
+
+      </section>
+      <footer>
+        
+
+        
+        <p>This project is maintained by <a href="http://github.com/yakenohara">yakenohara</a></p>
+        
+        
+      </footer>
+    </div>
+    <script src="assets/js/scale.fix.js"></script>
+
+    
+    
+    <script type="text/javascript">
+        $(document).ready(function() {
+            $('#toc').toc({
+              noBackToTopLinks: true,
+              title: '',
+              minimumHeaders: 1,
+              headers: 'section h1, section h2, section h3, section h4, section h5, section h6',
+              listType: 'ul',
+              showEffect: 'none',
+              classes: {list: 'tocList',
+                        item: 'tocItem'}
+            });
+        });
+    </script>
+
+    <script src="assets/js/script.js"></script>
+  </body>
+</html>
