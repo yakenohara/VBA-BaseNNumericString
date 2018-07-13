@@ -1,10 +1,11 @@
-theme: jekyll-theme-leap-day
-show_downloads: true
 plugins:
-  - jekyll-seo-tag
+  - jekyll-remote-theme
 
-defaults:
-  -
-    values:
-      title: 【VBA】N進数の四則演算・基数変換
-      description: Microsoft Excel 用VBAライブラリ(ユーザー定義関数群)
+remote_theme: yakenohara/Jekyll-Simple-Wiki-Theme
+repository: yakenohara/VBA-BaseNNumericString
+
+title: Base-N Numeric String
+description: 【VBA】N進数の四則演算・基数変換
+logo_url: 
+
+show_downloads: true
