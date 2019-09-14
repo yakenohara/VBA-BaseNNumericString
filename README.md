@@ -8,4 +8,4 @@ Microsoft Excel 用VBAライブラリ(ユーザー定義関数群)です
 * 内部的に浮動小数点数にキャストせずに演算します
 * N進数→N進数変換を、小数点を含んだ状態で実行できます。
 
-詳細は[専用ページ](https://yakenohara.github.io/VBA-BaseNNumericString)を参照下さい
+詳細は[専用ページ](https://yakenohara.github.io/ExcelVBA-BaseNNumericString/)を参照下さい
