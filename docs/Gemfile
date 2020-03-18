@@ -5,3 +5,10 @@ group :jekyll_plugins do
 end
 
 gem 'jekyll-remote-theme'
+
+# <Temporary workaround>
+# Latest release of faraday (1.0.0) causes following error.
+# `uninitialized constant Faraday::Error::ConnectionFailed`
+# 
+gem 'faraday', '0.17.3'
+# </Temporary workaround>
